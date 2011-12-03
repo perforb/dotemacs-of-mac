@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: string-match and match-string
+# --
+(let ((${1:str} ${2:(concat "abc" "def")}))
+  (and (string-match ${3:"\\\\(b\\\\)c"} $1)
+       (match-string ${4:0} $1)))

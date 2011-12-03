@@ -1,0 +1,10 @@
+.git
+*.elc
+!.gitignore
+src/
+url/
+auto-save-list
+ac-comphist.dat
+newsticker
+*history
+tramp
