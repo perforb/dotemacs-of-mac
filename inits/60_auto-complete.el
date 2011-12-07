@@ -57,7 +57,11 @@
 
 ;; for cperl-mode
 ;; (install-elisp "http://www.emacswiki.org/emacs/download/perl-completion.el")
-(setq plcmp-use-keymap nil)
+;; ref http://d.hatena.ne.jp/IMAKADO/20081125/1227552844
+;; ref http://bm11.kayac.com/2009/project/perlcomletionel/
+;; doc http://www.emacswiki.org/emacs/PerlCompletion
+
+;; (setq plcmp-use-keymap nil) ; nil に設定した場合デフォルトのキーバインド割当が行われない
 (require 'perl-completion)
 (add-hook 'cperl-mode-hook
           '(lambda ()
