@@ -2,12 +2,12 @@
 ;; zencoding-mode
 ;;
 ;; (install-elisp "https://raw.github.com/rooney/zencoding/1f62291a67ee3ef86df0d4a2304395cdfb315b31/zencoding-mode.el")
-;; man http://code.google.com/p/zen-coding/
+;; man http://code.google.com/p/zen-coding
+;; ref http://code.google.com/p/zen-coding/wiki/ZenHTMLElementsEn
 ;;______________________________________________________________________
 
-
 (require 'zencoding-mode)
-(add-hook 'html-helper-mode-hook 'zencoding-mode)
+(add-hook 'html-mode-hook 'zencoding-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

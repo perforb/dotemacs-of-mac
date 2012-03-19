@@ -12,5 +12,3 @@
 ;;               '(org-mode text-mode mew-draft-mode myhatena-mode))
 ;;     (text-adjust-space-buffer)))
 ;;(add-hook 'before-save-hook 'text-adjust-space-before-save-if-needed)
-
-(global-set-key (kbd "C-c C-b s") 'text-adjust-space-buffer)

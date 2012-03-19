@@ -19,16 +19,16 @@
       (setq line-spacing 0.2)              ; 行間
       (when (>= emacs-major-version 23)
         (tool-bar-mode nil)
-        (set-frame-font "Menlo-11")
+        (set-frame-font "Menlo-12")
         (set-fontset-font (frame-parameter nil 'font)
                           'japanese-jisx0208
-                          (font-spec :family "Hiragino Maru Gothic ProN" :size 12))
+                          (font-spec :family "Hiragino Maru Gothic ProN" :size 13))
         (set-fontset-font (frame-parameter nil 'font)
                           'japanese-jisx0212
-                          (font-spec :family "Hiragino Maru Gothic ProN" :size 12))
+                          (font-spec :family "Hiragino Maru Gothic ProN" :size 13))
         (set-fontset-font (frame-parameter nil 'font)
                           'katakana-jisx0201
-                          (font-spec :family "Hiragino Maru Gothic ProN" :size 12)))
+                          (font-spec :family "Hiragino Maru Gothic ProN" :size 13)))
       (setq ns-pop-up-frames nil)))
 
 
@@ -84,7 +84,7 @@
 
 ;; タブに表示させるバッファの設定
 (defvar my-tabbar-displayed-buffers
-  '("*Messages*" "*Backtrace*" "*Colors*" "*Faces*" "*vc-")
+  '("*scratch*" "*Messages*" "*vc-")
   "*Regexps matches buffer names always included tabs.")
 
 (defun my-tabbar-buffer-list ()
@@ -247,3 +247,6 @@ mouse-3: delete other windows"
   "Return face used at point."
   (interactive)
   (message "%s" (get-char-property (point) 'face)))
+
+;; 行の折り返しトグルコマンド
+(define-key global-map (kbd "C-c r") 'toggle-truncate-lines)

@@ -6,11 +6,11 @@
 
 (require 'smartchr)
 (defun smartchr-custom-keybindings ()
-  (local-set-key (kbd "=") (smartchr '(" = " " == " " === "  "=")))
+  (local-set-key (kbd "=") (smartchr '("=" " = " " == " " === ")))
   ;; !! がカーソルの位置
   (local-set-key (kbd "(") (smartchr '("(`!!')" "(")))
   (local-set-key (kbd "[") (smartchr '("[`!!']" "[[`!!']]" "[")))
-  (local-set-key (kbd "{") (smartchr '("{\n`!!'\n}" "{`!!'}" "{")))
+  (local-set-key (kbd "{") (smartchr '("{`!!'}" "{\n`!!'\n}" "{")))
   (local-set-key (kbd "`") (smartchr '("\``!!''" "\`")))
   (local-set-key (kbd "\"") (smartchr '("\"`!!'\"" "\"")))
   (local-set-key (kbd ">") (smartchr '(">" "->" ">>")))

@@ -28,20 +28,8 @@
                 speedbar-frame-parameters))
   ;; Speedbar で表示するファイルタイプ
   (setq speedbar-supported-extension-expressions
-        (append '(".el" ".java"
-                  ".s?html?" ".xml" ".css" ".js" ".c" ".php" ".pl" ".rb"
-                  ".gif" ".jpe?g" ".png")))
+        (append '("*.*")))
   ) ;; end of speedbar
 
 ;; F4 で Speedbar
 (global-set-key [(meta f4)] 'speedbar-get-focus)
-
-
-
-
-
-
-
-
-
-

@@ -67,10 +67,10 @@
 ;;______________________________________________________________________
 
 ;; sticky
-(require 'sticky)
+;; (require 'sticky)
 ;; セミコロンを押下時に shift キーを押した状態になる
 ;; 英大文字や $ 記号などの入力に便利
-(use-sticky-key ";" sticky-alist:ja)
+;; (use-sticky-key ";" sticky-alist:ja)
 
 ;; 現在位置のファイル・URLを開く
 (ffap-bindings)
@@ -99,9 +99,8 @@
         ))
 
 ;; Indent
+(setq-default tab-width 4)
 (setq-default indent-tabs-mode nil)
-(setq-default c-basic-offset 2)
-(setq-default tab-width 2)
 (c-set-offset 'case-label '+)
 
 ;; C-k で改行を含め削除
@@ -152,7 +151,7 @@
 
 ;;
 ;; auto-async-byte-compile
-;; warning elisp ファイル上にエラーがある場合はバイトコンパイルされないので注意
+;; Warning: elisp ファイル上にエラーがある場合はバイトコンパイルされないので注意
 ;;______________________________________________________________________
 
 (require 'auto-async-byte-compile)

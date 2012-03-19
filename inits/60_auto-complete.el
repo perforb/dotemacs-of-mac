@@ -41,7 +41,7 @@
                      ac-source-words-in-buffer)))
 
 (auto-complete-init-sources)
-  
+
 (add-to-list 'ac-modes 'emacs-lisp-mode)
 (add-to-list 'ac-modes 'html-helper-mode)
 (add-to-list 'ac-modes 'js2-mode)

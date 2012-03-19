@@ -6,19 +6,22 @@
 (defalias 'perl-mode 'cperl-mode)
 
 ;; Indent
-(setq cperl-indent-level 2)
-(setq cperl-continued-statement-offset 4)
-(setq cperl-close-paren-offset -4)
-(setq cperl-indent-region-fix-constructs t)
-(setq cperl-indent-parens-as-block t)
-(setq cperl-comment-column 40)
+(setq cperl-indent-level 4                ; インデント幅を 4 にする
+      cperl-continued-statement-offset 4  ; 継続する文のオフセット
+      cperl-brace-offset -4               ; ブレースのオフセット
+      cperl-label-offset -4               ; label のオフセット
+      cperl-indent-parens-as-block t      ; 括弧もブロックとしてインデント
+      cperl-close-paren-offset -4         ; 閉じ括弧のオフセット
+      cperl-tab-always-indent t           ; TAB をインデントにする
+      cperl-indent-region-fix-constructs t
+      cperl-comment-column 40)
 
 (add-to-list 'auto-mode-alist '("\\.pl$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.pm$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.t$" . cperl-mode))
 
 
-;; perlbrewで入れたperlを使う
+;; perlbrew で入れた perl を使う
 ;; ref http://d.hatena.ne.jp/kiririmode/20100925/p1
 ;; ref http://gugod.org/2010/05/perlbrew-path-in-emacsapp.html
 ;; (load "cl-seq")
@@ -33,8 +36,8 @@
 
 
 ;; ref http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
-;; モジュールソースバッファの場合はその場で、
-;; その他のバッファの場合は別ウィンドウに開く。
+;; モジュールソースバッファの場合はその場で,
+;; その他のバッファの場合は別ウィンドウに開く.
 
 (put 'perl-module-thing 'end-op
      (lambda ()
@@ -73,7 +76,7 @@
 ;; コード整形
 ;; ref http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
 ;; install
-;; 1)perltidy $ sudo port install p5-perl-tidy
+;; 1) perltidy $ sudo port install p5-perl-tidy
 ;; 2)$HOME にフォーマットの設定ファイル .perltidyrc を置く
 ;; [Testing the .perltidyrc]
 ;; $perltidy -dpro
@@ -118,7 +121,7 @@
 ;; flymake
 ;; http://unknownplace.org/memo/2007/12/21#e001
 (defvar flymake-perl-err-line-patterns
-  '(("\\(.*\\) at \\([^ \n]+\\) line \\([0-9]+\\)[,.\n]" 2 3 nil 1)))
+  '(("\\(.*\\) at \\([^ \n]+\\) line \\([0-9]+\\) [,.\n]" 2 3 nil 1)))
 
 (defconst flymake-allowed-perl-file-name-masks
   '(("\\.pl$" flymake-perl-init)

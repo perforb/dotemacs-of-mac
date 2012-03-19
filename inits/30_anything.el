@@ -1,6 +1,6 @@
 ;;
 ;; anything
-;; 1)M-x auto-install-batch anything
+;; (auto-install-batch "anything")
 ;;______________________________________________________________________
 
 (require 'anything-startup)
