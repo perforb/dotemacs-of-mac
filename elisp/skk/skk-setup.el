@@ -40,9 +40,9 @@
 (global-set-key "\C-xt" 'skk-tutorial)
 
 ;;; Dictionaries.
-(defvar skk-large-jisyo "/Users/REVOLVINGSOUND/.emacs.d/share/skk/SKK-JISYO.L")
-(defvar skk-aux-large-jisyo "/Users/REVOLVINGSOUND/.emacs.d/share/skk/SKK-JISYO.L")
-(defvar skk-tut-file "/Users/REVOLVINGSOUND/.emacs.d/share/skk/SKK.tut")
+(defvar skk-large-jisyo "/Users/REVOLVINGSOUND/.emacs.d/etc/skk/SKK-JISYO.L")
+(defvar skk-aux-large-jisyo "/Users/REVOLVINGSOUND/.emacs.d/etc/skk/SKK-JISYO.L")
+(defvar skk-tut-file "/Users/REVOLVINGSOUND/.emacs.d/etc/skk/SKK.tut")
 
 ;;; Isearch setting.
 (add-hook 'isearch-mode-hook

@@ -29,7 +29,6 @@
               "/usr/bin"
               "/sw/bin"
               "/usr/local/bin"
-              "/opt/local/bin"
               (expand-file-name "~/.emacs.d/lib/ruby/site_ruby")
               ))
 
@@ -39,7 +38,7 @@
   (setenv "PATH" (concat dir ":" (getenv "PATH")))
   (setq exec-path (append (list dir) exec-path))))
 
-(setenv "GEM_HOME" "/opt/local/lib/ruby/gems/1.8")
+(setenv "GEM_HOME" "/usr/bin/gem")
 (setenv "RUBYLIB" "~/.emacs.d/lib/ruby/site_ruby/")
 
 

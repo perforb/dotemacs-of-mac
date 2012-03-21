@@ -10,7 +10,9 @@
 
 (require 'auto-complete-config)
 (require 'auto-complete-etags)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+
+;; 辞書補完
+;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/conf/ac-dict")
 
 ;; 補完ウィンドウ内でのキー定義
 (define-key ac-completing-map (kbd "C-n") 'ac-next)

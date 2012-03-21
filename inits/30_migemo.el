@@ -8,7 +8,7 @@
 ;; このため migemo がうまく動かなかった
 (setq migemo-command "migemo")
 (setq migemo-options '("-t" "emacs"))
-(setq migemo-dictionary (expand-file-name "~/.emacs.d/share/migemo/migemo-dict"))
+(setq migemo-dictionary (expand-file-name "~/.emacs.d/conf/migemo/migemo-dict"))
 (setq migemo-user-dictionary nil)
 (setq migemo-regex-dictionary nil)
 (require 'migemo)

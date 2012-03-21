@@ -11,4 +11,4 @@
   (setq skk-byte-compile-init-file t))
 
 ;;チュートリアルの場所設定
-(setq skk-tut-file "~/.emacs.d/share/skk/SKK.tut")
+(setq skk-tut-file "~/.emacs.d/conf/skk/SKK.tut")

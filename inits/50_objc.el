@@ -115,7 +115,7 @@
 ;; ;; etags-table の機能を有効にする
 ;; (require 'etags-table)
 ;; (add-to-list  'etags-table-alist
-;;               '("\\.[mh]$" "~/.emacs.d/share/tags/objc.TAGS"))
+;;               '("\\.[mh]$" "~/.emacs.d/conf/tags/objc.TAGS"))
 ;; ;; auto-complete に etags の内容を認識させるための変数
 ;; ;; 以下の例だと3文字以上打たないと補完候補にならないように設定してあります。requires の次の数字で指定します
 ;; (defvar ac-source-etags

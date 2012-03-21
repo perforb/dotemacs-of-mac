@@ -24,7 +24,7 @@
 
 ;; スニペットの位置を複数設定します。同名の snippets はより後ろに設定した方で上書きされます。
 ;; (setq yas/root-directory '("~/.emacs.d/elisp/yasnippet-0.6.1c/snippets"
-;;                           "~/.emacs.d/etc/snippets"))
+;;                           "~/.emacs.d/conf/snippets"))
 (setq yas/root-directory '("~/.emacs.d/elisp/yasnippet/snippets"))
 
 ;; yas/load-directory も複数ディレクトリに対応した修正をします
