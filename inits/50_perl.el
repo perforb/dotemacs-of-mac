@@ -1,25 +1,41 @@
 ;;
 ;; cperl
-;; (auto-install-from-emacswiki "cperl-mode")
 ;;______________________________________________________________________
 
+;; perl-modeをcperl-modeのエイリアスにする
 (defalias 'perl-mode 'cperl-mode)
-
-;; Indent
-(setq cperl-indent-level 4                ; インデント幅を 4 にする
-      cperl-continued-statement-offset 4  ; 継続する文のオフセット
-      cperl-brace-offset -4               ; ブレースのオフセット
-      cperl-label-offset -4               ; label のオフセット
-      cperl-indent-parens-as-block t      ; 括弧もブロックとしてインデント
-      cperl-close-paren-offset -4         ; 閉じ括弧のオフセット
-      cperl-tab-always-indent t           ; TAB をインデントにする
-      cperl-indent-region-fix-constructs t
-      cperl-comment-column 40)
 
 (add-to-list 'auto-mode-alist '("\\.pl$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.pm$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.t$" . cperl-mode))
 
+;; cperl-modeのインデント設定
+(setq cperl-indent-level 4                         ; インデント幅を 4 にする
+      cperl-continued-statement-offset 4           ; 継続する文のオフセット
+      cperl-brace-offset -4                        ; ブレースのオフセット
+      cperl-label-offset -4                        ; label のオフセット
+      cperl-indent-parens-as-block t               ; 括弧もブロックとしてインデント
+      cperl-close-paren-offset -4                  ; 閉じ括弧のオフセット
+      cperl-tab-always-indent t                    ; TAB をインデントにする
+      cperl-indent-region-fix-constructs t
+      cperl-highlight-variables-indiscriminately t ; スカラを常にハイライトする
+      cperl-comment-column 40)
+
+;; perl-completionの設定
+;; (install-elisp "http://www.emacswiki.org/emacs/download/perl-completion.el")
+
+(defun perl-completion-hook ()
+  (when (require 'perl-completion nil t)
+    (perl-completion-mode t)
+    (when (require 'auto-complete nil t)
+      (auto-complete-mode t)
+    ;; 補完のキーバインドを変更
+    (define-key cperl-mode-map (kbd "C-o") 'plcmp-cmd-smart-complete)
+      (make-variable-buffer-local 'ac-sources)
+      (setq ac-sources
+            '(ac-source-perl-completion)))))
+
+(add-hook  'cperl-mode-hook 'perl-completion-hook)
 
 ;; perlbrew で入れた perl を使う
 ;; ref http://d.hatena.ne.jp/kiririmode/20100925/p1
@@ -33,7 +49,6 @@
 ;; (setenv "PATH"
 ;;         (reduce (lambda (a b) (concatenate 'string a ":" b))
 ;;                 exec-path))
-
 
 ;; ref http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
 ;; モジュールソースバッファの場合はその場で,
