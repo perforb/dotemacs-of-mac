@@ -15,19 +15,15 @@
 ;; C-: に anything-for-files を割り当て
 (define-key global-map (kbd "C-:") 'anything-for-files)
 
-;; インクリメンタルサーチから移行できるように
-(global-set-key (kbd "M-s") 'anything-c-moccur-occur-by-moccur)
-(define-key isearch-mode-map (kbd "C-o") 'anything-c-moccur-from-isearch)
-
-;; 旧来の isearch-occur は C-M-o へ引っ越し
-(define-key isearch-mode-map (kbd "C-M-o") 'isearch-occur)
-
 ;; フレームの移動
 (global-set-key (kbd "C-t") 'next-multiframe-window)
 (global-set-key (kbd "C-S-t") 'previous-multiframe-window)
 
 ;; インデント
 (global-set-key (kbd "C-S-i") 'indent-region)
+
+;; インデントの削除
+(global-set-key (kbd "C-c d") 'delete-indentation)
 
 ;; Eclipse ライクな行の複製
 (defun duplicate-line-backward ()
@@ -94,10 +90,3 @@
 
 (global-set-key (kbd "<M-s-up>") 'duplicate-line-backward)
 (global-set-key (kbd "<M-s-down>") 'duplicate-line-forward)
-
-;; インデントの削除
-(global-set-key (kbd "C-c d") 'delete-indentation)
-
-;; align
-;; 設定は 30_align.el 参照
-(global-set-key (kbd "C-c a") 'align)

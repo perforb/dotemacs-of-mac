@@ -29,6 +29,7 @@
               "/usr/bin"
               "/sw/bin"
               "/usr/local/bin"
+              "/usr/local/share/python"
               (expand-file-name "~/.emacs.d/lib/ruby/site_ruby")
               ))
 
