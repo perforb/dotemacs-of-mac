@@ -7,7 +7,7 @@
 (define-key global-map [(s f)] 'recentf-open-files)
 
 ;; C-l に略語展開・補完機能を割り当て
-(define-key global-map (kbd "C-l") 'hippie-expand)
+(define-key global-map (kbd "M-/") 'hippie-expand)
 
 ;; C-h をバックスペースに変更
 (keyboard-translate ?\C-h ?\C-?)

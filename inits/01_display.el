@@ -19,7 +19,8 @@
       (setq line-spacing 0.2)              ; 行間
       (when (>= emacs-major-version 23)
         (tool-bar-mode nil)
-        (set-frame-font "Menlo-12")
+        ;; (set-frame-font "Menlo-12")
+        (set-frame-font "Migu 1m")
         (set-fontset-font (frame-parameter nil 'font)
                           'japanese-jisx0208
                           (font-spec :family "Hiragino Maru Gothic ProN" :size 13))
@@ -61,7 +62,7 @@
 ;; 外観変更
 (set-face-attribute
  'tabbar-default nil
- :family "Comic Sans MS"
+ :family "Migu 1M"
  :background "black"
  :foreground "gray72"
  :height 1.0)
@@ -169,7 +170,7 @@ mouse-3: delete other windows"
 ;; (eval-after-load "color-theme"
 ;;   '(progn
 ;;      (color-theme-initialize)
-;;      (color-theme-arjen)))
+;;      (color-theme-midnight)))
 
 
 ;;
@@ -195,6 +196,12 @@ mouse-3: delete other windows"
 (set-face-foreground 'fringe                           "#666666") ; fringe(折り返し記号なでが出る部分)
 (set-face-background 'fringe                           "#282828") ; fringe
 
+;; カーソル位置のフェースを調べる関数
+(defun describe-face-at-point ()
+  "Return face used at point."
+  (interactive)
+  (message "%s" (get-char-property (point) 'face)))
+
 ;; 現在行をハイライト
 (global-hl-line-mode t)
 (set-face-background 'hl-line "#222244")
@@ -212,12 +219,12 @@ mouse-3: delete other windows"
 (set-face-foreground 'show-paren-mismatch-face "red")
 
 ;; 行番号表示
-;; (global-linum-mode)
-;; (setq linum-format "%4d")
+(global-linum-mode)
+(setq linum-format "%4d")
 
 ;; 全角スペース、タブの強調表示
 (defface my-face-b-1 '((t (:background "medium aquamarine"))) nil)
-(defface my-face-b-2 '((t (:background "medium aquamarine"))) nil)
+(defface my-face-b-2 '((t (:background "#222244" :underline t))) nil)
 (defface my-face-u-1 '((t (:foreground "SteelBlue" :underline t))) nil)
 (defvar my-face-b-1 'my-face-b-1)
 (defvar my-face-b-2 'my-face-b-2)
@@ -241,12 +248,6 @@ mouse-3: delete other windows"
 (setq eol-mnemonic-dos "(CRLF)")
 (setq eol-mnemonic-mac "(CR)")
 (setq eol-mnemonic-unix "(LF)")
-
-;; カーソル位置のフェースを調べる関数
-(defun describe-face-at-point ()
-  "Return face used at point."
-  (interactive)
-  (message "%s" (get-char-property (point) 'face)))
 
 ;; 行の折り返しトグルコマンド
 (define-key global-map (kbd "C-c r") 'toggle-truncate-lines)

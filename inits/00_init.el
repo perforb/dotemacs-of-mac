@@ -148,7 +148,6 @@
 ;; save-buffer 時、buffer 末尾に空行が常にあるように
 (setq require-final-newline t)
 
-
 ;;
 ;; auto-async-byte-compile
 ;; Warning: elisp ファイル上にエラーがある場合はバイトコンパイルされないので注意

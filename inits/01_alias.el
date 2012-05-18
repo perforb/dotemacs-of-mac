@@ -6,4 +6,14 @@
 (defalias 'qrr 'query-replace-regexp)
 (defalias 'dtw 'delete-trailing-whitespace)
 (defalias 'tab 'text-adjust-buffer)
+(defalias 'tasb 'text-adjust-space-buffer)
+
+
+
+
+
+
+
+
+
 

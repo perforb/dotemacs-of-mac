@@ -45,3 +45,6 @@
 ;; 40 マイナーモード
 ;; 50 メジャーモード
 ;; 90 起動後実行系
+
+;; dired-find-alternate-file の有効化
+(put 'dired-find-alternate-file 'disabled nil)
