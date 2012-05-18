@@ -1,10 +1,18 @@
-# Emacs Settings on Mac
+# Emacs settings on Mac
 
 This is the setting of Cocoa Emacs.
 
 ## Version
 
 `GNU Emacs 23.2.92.1 (x86_64-apple-darwin10.6.0, NS apple-appkit-1038.35)`
+
+# Submodule
+
+## yasnippet
+See <https://github.com/capitaomorte/yasnippet>
+
+    $ mkdir ~/.emacs.d/plugins
+    $ git submodule add git://github.com/capitaomorte/yasnippet.git plugins/yasnippet
 
 # Add-On
 
@@ -112,14 +120,16 @@ This is the setting of Cocoa Emacs.
 
     (install-elisp "http://jblevins.org/projects/markdown-mode/markdown-mode.el")
 
-# Submodule
+## Markdown
 
-## yasnippet
-See <https://github.com/capitaomorte/yasnippet>
+    $ cd ~/.emacs.d/
+    $ mkdir lib
+    $ cd lib/
+    $ wget http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip
+    $ unzip Markdown_1.0.1.zip
+    $ mv Markdown_1.0.1/Markdown.pl ./
+    $ rm -rf Markdown_*
 
-    $ mkdir ~/.emacs.d/plugins
-    $ git submodule add http://github.com/capitaomorte/yasnippet.git plugins/yasnippet
-    $ git commit -m "Add submodule"
+### append elisp to init.el
 
-    $ git submodule init
-    $ git submodule update
+    (setq markdown-command "perl /home/.emacs.d/lib/Markdown.pl")
