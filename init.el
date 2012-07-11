@@ -1,3 +1,5 @@
+(require 'cl)
+
 ;; ------------------------------------------------------------------------
 ;; @ load-path
 
@@ -64,17 +66,18 @@
               "/sw/bin"
               "/usr/local/share/python"
               "/usr/local/bin"
-              "~/bin"
               (expand-file-name "~/.emacs.d/lib/ruby/site_ruby")
+              (expand-file-name "~/bin")
+              (expand-file-name "~/.perlbrew/bin")
+              (expand-file-name "~/.perlbrew/perls/perl-5.14.2/bin")
               ))
 
 ;; PATH と exec-path に同じ物を追加します
-(when ;; (and
-       (file-exists-p dir) ;; (not (member dir exec-path)))
-  (setenv "PATH" (concat dir ":" (getenv "PATH")))
-  (setq exec-path (append (list dir) exec-path))))
+ (when (and (file-exists-p dir) (not (member dir exec-path)))
+   (setenv "PATH" (concat dir ":" (getenv "PATH")))
+   (setq exec-path (append (list dir) exec-path))))
 
-(setenv "GEM_HOME" "/usr/bin/gem")
+(setenv "GEM_HOME" "~/.rbenv/shims/gem")
 (setenv "RUBYLIB" "~/.emacs.d/lib/ruby/site_ruby/")
 
 ;; ------------------------------------------------------------------------
@@ -245,12 +248,9 @@
 ;; (install-elisp "http://www.emacswiki.org/emacs/download/tabbar.el")
 ;; See http://d.hatena.ne.jp/tequilasunset/20110103/p1
 ;; See http://idita.blog11.fc2.com/blog-entry-810.html
-
+(when window-system
 (require 'tabbar)
 (tabbar-mode 1)
-
-;; タブ上でマウスホイール操作無効
-(tabbar-mwheel-mode -1)
 
 ;; グループ化しない
 (setq tabbar-buffer-groups-function nil)
@@ -318,39 +318,7 @@ are always included."
 
 ;; タブ切り替え
 (global-set-key [C-tab] 'tabbar-forward-tab)
-(global-set-key [C-S-tab] 'tabbar-backward-tab)
-
-;; タブ上をマウス中クリックで kill-buffer
-(defun my-tabbar-buffer-help-on-tab (tab)
-  "Return the help string shown when mouse is onto TAB."
-  (if tabbar--buffer-show-groups
-      (let* ((tabset (tabbar-tab-tabset tab))
-             (tab (tabbar-selected-tab tabset)))
-        (format "mouse-1: switch to buffer %S in group [%s]"
-                (buffer-name (tabbar-tab-value tab)) tabset))
-    (format "\
-mouse-1: switch to buffer %S\n\
-mouse-2: kill this buffer\n\
-mouse-3: delete other windows"
-            (buffer-name (tabbar-tab-value tab)))))
-
-(defun my-tabbar-buffer-select-tab (event tab)
-  "On mouse EVENT, select TAB."
-  (let ((mouse-button (event-basic-type event))
-        (buffer (tabbar-tab-value tab)))
-    (cond
-     ((eq mouse-button 'mouse-2)
-      (with-current-buffer buffer
-        (kill-buffer)))
-     ((eq mouse-button 'mouse-3)
-      (delete-other-windows))
-     (t
-      (switch-to-buffer buffer)))
-    ;; Don't show groups.
-    (tabbar-buffer-show-groups nil)))
-
-(setq tabbar-help-on-tab-function 'my-tabbar-buffer-help-on-tab)
-(setq tabbar-select-tab-function 'my-tabbar-buffer-select-tab)
+(global-set-key [C-S-tab] 'tabbar-backward-tab))
 
 ;; ------------------------------------------------------------------------
 ;; @ popwin
@@ -422,6 +390,10 @@ mouse-3: delete other windows"
 ;; 行番号表示
 (global-linum-mode)
 (setq linum-format "%4d")
+
+;; 行番号、列番号の表示(モードライン)
+(line-number-mode t)
+(column-number-mode t)
 
 ;; 全角スペース、タブの強調表示
 (defface my-face-b-1 '((t (:background "medium aquamarine"))) nil)
@@ -500,11 +472,40 @@ mouse-3: delete other windows"
 (global-set-key (kbd "C-t") 'next-multiframe-window)
 (global-set-key (kbd "C-S-t") 'previous-multiframe-window)
 
+;;; windmove
+;; (windmove-default-keybindings) ; 引数なしの場合は Shift
+;; Alt + 矢印でウィンドウを移動する
+;; (windmove-default-keybindings 'meta) ; Alt の場合は meta を指定
+;; Mac の Command + 矢印でウィンドウを移動する
+(windmove-default-keybindings 'super) ; Macの人はこちらをオススメ
+
 ;; インデント
 (global-set-key (kbd "C-S-i") 'indent-region)
 
 ;; インデントの削除
 (global-set-key (kbd "C-c d") 'delete-indentation)
+
+;; 行番号を指定して移動
+(global-set-key "\M-g" 'goto-line)
+
+;; 範囲指定していないとき、C-wで前の単語を削除
+(defadvice kill-region (around kill-word-or-kill-region activate)
+  (if (and (interactive-p) transient-mark-mode (not mark-active))
+      (backward-kill-word 1)
+    ad-do-it))
+
+;; minibuffer用
+(define-key minibuffer-local-completion-map "\C-w" 'backward-kill-word)
+
+;; カーソル位置の単語を削除
+(defun kill-word-at-point ()
+  (interactive)
+  (let ((char (char-to-string (char-after (point)))))
+    (cond
+     ((string= " " char) (delete-horizontal-space))
+     ((string-match "[\t\n -@\[-`{-~]" char) (kill-word 1))
+     (t (forward-char) (backward-word) (kill-word 1)))))
+(global-set-key "\M-d" 'kill-word-at-point)
 
 ;; Eclipse ライクな行の複製
 (defun duplicate-line-backward ()
@@ -606,8 +607,6 @@ mouse-3: delete other windows"
 
 ;; F4 で Speedbar
 (global-set-key [(meta f4)] 'speedbar-get-focus)
-;; 起動前に実行する処理
-(require 'cl)
 
 ;; ------------------------------------------------------------------------
 ;; @ functions
@@ -864,6 +863,27 @@ mouse-3: delete other windows"
 (define-key dired-mode-map (kbd "RET") 'dired-open-in-accordance-with-situation)
 (define-key dired-mode-map (kbd "a") 'dired-find-file)
 
+;; See http://d.hatena.ne.jp/oh_cannot_angel/20101216/1292506110
+;; dired でマークをつけたファイルを開く
+(eval-after-load "dired"
+  '(progn
+     (define-key dired-mode-map (kbd "F") 'my-dired-find-marked-files)
+     (defun my-dired-find-marked-files (&optional arg)
+       "Open each of the marked files, or the file under the point, or when prefix arg, the next N files "
+       (interactive "P")
+       (let* ((fn-list (dired-get-marked-files nil arg)))
+         (mapc 'find-file fn-list)))))
+
+;; dired でマークをつけたファイルを view モードで開く
+(eval-after-load "dired"
+  '(progn
+     (define-key dired-mode-map (kbd "V") 'my-dired-view-marked-files)
+     (defun my-dired-view-marked-files (&optional arg)
+       "Open each of the marked files, or the file under the point, or when prefix arg, the next N files "
+       (interactive "P")
+       (let* ((fn-list (dired-get-marked-files nil arg)))
+         (mapc 'view-file fn-list)))))
+
 ;; ------------------------------------------------------------------------
 ;; @ grep
 
@@ -900,13 +920,14 @@ mouse-3: delete other windows"
 ;; See http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
 ;; make 時に ruby: no such file to load -- romkan (LoadError) という ruby の require 絡みのエラー発生
 ;; このため migemo がうまく動かなかった
-(setq migemo-command "migemo")
-(setq migemo-options '("-t" "emacs"))
-(setq migemo-dictionary (expand-file-name "~/.emacs.d/lib/migemo/migemo-dict"))
-(setq migemo-user-dictionary nil)
-(setq migemo-regex-dictionary nil)
-(require 'migemo)
-(migemo-init)
+(when window-system
+  (setq migemo-command "migemo")
+  (setq migemo-options '("-t" "emacs"))
+  (setq migemo-dictionary (expand-file-name "~/.emacs.d/lib/migemo/migemo-dict"))
+  (setq migemo-user-dictionary nil)
+  (setq migemo-regex-dictionary nil)
+  (require 'migemo)
+  (migemo-init))
 
 ;; ------------------------------------------------------------------------
 ;; @ utility
@@ -956,7 +977,8 @@ mouse-3: delete other windows"
   (local-set-key (kbd "(") (smartchr '("(`!!')" "(")))
   (local-set-key (kbd "[") (smartchr '("[`!!']" "[[`!!']]" "[")))
   (local-set-key (kbd "{") (smartchr '("{`!!'}" "{\n`!!'\n}" "{")))
-  (local-set-key (kbd "`") (smartchr '("\``!!''" "\`")))
+  (local-set-key (kbd "`") (smartchr '("\``!!'\`" "\`")))
+  (local-set-key (kbd "'") (smartchr '("\'`!!'\'" "\'")))
   (local-set-key (kbd "\"") (smartchr '("\"`!!'\"" "\"")))
   (local-set-key (kbd ">") (smartchr '(">" "->" ">>")))
   )
@@ -993,27 +1015,11 @@ mouse-3: delete other windows"
 ;; ------------------------------------------------------------------------
 ;; @ yasnippet
 
-(require 'yasnippet) ;; not yasnippet-bundle
-
-;; スニペット展開を <TAB> から <SPC>  に変更
-;; (setq yas/trigger-key "SPC")
-
-;; メニューは使わない
-(setq yas/use-menu nil)
-
-(require 'dropdown-list)
-(setq yas/prompt-functions '(yas/dropdown-prompt))
-
-;; 初期化
-(yas/initialize)
-
-;; スニペットの位置を複数設定します. 同名の snippets はより後ろに設定した方で上書きされます.
-(setq yas/root-directory '("~/.emacs.d/plugins/yasnippet/snippets"))
-
-;; yas/load-directory も複数ディレクトリに対応した修正をします
-(mapc 'yas/load-directory yas/root-directory)
+(require 'yasnippet)
+(yas/global-mode 1)
 
 ;; References
+;; https://github.com/capitaomorte/yasnippet
 ;; http://yasnippet.googlecode.com/svn/trunk/doc/index.html
 ;; http://d.hatena.ne.jp/botchy/20080502/1209717204
 ;; http://yasnippet-doc-jp.googlecode.com/svn/trunk/doc-jp/index.html
@@ -1111,7 +1117,7 @@ Use CREATE-TEMP-F for creating temp copy."
                nil 1 2 4))
 
 
-;; JS 用 Flymake の初期化関数の定義
+;; js2 Flymake の初期化関数の定義
 (defun flymake-jsl-init ()
   (list "jsl" (list "-process" (flymake-init-create-temp-buffer-copy
                                 'flymake-create-temp-inplace))))
@@ -1158,13 +1164,37 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; ------------------------------------------------------------------------
 ;; @ js2-mode
 
-;; インデント設定
-;; リージョン選択後 C-S-i
-(add-hook 'js2-mode-hook 'js-indent-hook)
-
 ;; References
 ;; http://d.hatena.ne.jp/m-hiyama/20080627/1214549228
 ;; http://d.hatena.ne.jp/speg03/20091011/1255244329
+
+;; インデントの関数の再設定 (http://blog.kiftwi.net/2011/12/13/emacs-js2-mode-indent/)
+;; Usage ブロック内で C-S-i
+(setq-default js2-basic-offset 4)
+
+(when (load "js2" t)
+  (setq js2-bounce-indent-flag nil)
+  (set-face-foreground 'js2-function-param-face (face-foreground font-lock-variable-name-face))
+  (defun indent-and-back-to-indentation ()
+    (interactive)
+    (indent-for-tab-command)
+    (let ((point-of-indentation
+           (save-excursion
+             (back-to-indentation)
+             (point))))
+      (skip-chars-forward "\s " point-of-indentation)))
+  (define-key js2-mode-map (kbd "C-i") 'indent-and-back-to-indentation)
+  (define-key js2-mode-map (kbd "C-m") nil)
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode)))
+
+;; インデントの関数の再設定
+(add-hook 'js2-mode-hook
+          #'(lambda ()
+              (require 'js)
+              (setq js-indent-level 2
+                    js-expr-indent-offset 2
+                    indent-tabs-mode nil)
+              (set (make-local-variable 'indent-line-function) 'js-indent-line)))
 
 ;; ------------------------------------------------------------------------
 ;; @ zencoding-mode
@@ -1275,11 +1305,9 @@ Use CREATE-TEMP-F for creating temp copy."
 (defalias 'htmlf 'my-html-format-region)
 (add-hook 'html-mode-hook
           '(lambda ()
-             (define-key html-mode-map (kbd "C-M-q") 'my-html-format-region)))
-(add-hook 'lisp-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "C-c e") 'eval-region)
-             (setq indent-tabs-mode nil)))
+             (define-key html-mode-map (kbd "C-M-q") 'my-html-format-region)
+             (setq indent-tabs-mode nil)
+             (setq-default tab-width 4)))
 
 ;; ------------------------------------------------------------------------
 ;; @ markdown-mode
@@ -1499,13 +1527,15 @@ Use CREATE-TEMP-F for creating temp copy."
              (local-set-key (kbd "C-m") 'org-return-indent)))
 
 ;; ------------------------------------------------------------------------
-;; @ cperl
+;; @ perl
 
 ;; perl-mode を cperl-mode のエイリアスにする
 (defalias 'perl-mode 'cperl-mode)
+(require 'cperl-mode)
 
 (add-to-list 'auto-mode-alist '("\\.pl$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.pm$" . cperl-mode))
+(add-to-list 'auto-mode-alist '("\\.psgi$" . cperl-mode))
 (add-to-list 'auto-mode-alist '("\\.t$" . cperl-mode))
 
 ;; cperl-mode のインデント設定
@@ -1514,7 +1544,7 @@ Use CREATE-TEMP-F for creating temp copy."
       cperl-brace-offset -4                        ; ブレースのオフセット
       cperl-label-offset -4                        ; label のオフセット
       cperl-indent-parens-as-block t               ; 括弧もブロックとしてインデント
-      cperl-close-paren-offset -4                  ; 閉じ括弧のオフセット
+      cperl-close-paren-offset -4                  ; 閉じ括弧のオフセットn
       cperl-tab-always-indent t                    ; TAB をインデントにする
       cperl-indent-region-fix-constructs t
       cperl-highlight-variables-indiscriminately t ; スカラを常にハイライトする
@@ -1535,19 +1565,6 @@ Use CREATE-TEMP-F for creating temp copy."
             '(ac-source-perl-completion)))))
 
 (add-hook  'cperl-mode-hook 'perl-completion-hook)
-
-;; perlbrew で入れた perl を使う
-;; See http://d.hatena.ne.jp/kiririmode/20100925/p1
-;; See http://gugod.org/2010/05/perlbrew-path-in-emacsapp.html
-;; (load "cl-seq")
-;; ;;; Prepend perlbrew paths to exec-path
-;; (mapc (lambda (x) (add-to-list 'exec-path x))
-;;       (mapcar 'expand-file-name
-;;               (list "~/perl5/perlbrew/bin" "~/perl5/perlbrew/perls/current/bin")))
-;; ;;; set PATH to be the same as exec-path, clobber the old PATH value.
-;; (setenv "PATH"
-;;         (reduce (lambda (a b) (concatenate 'string a ":" b))
-;;                 exec-path))
 
 ;; See http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
 ;; モジュールソースバッファの場合はその場で,
@@ -1593,7 +1610,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; 1) perltidy $ sudo port install p5-perl-tidy
 ;; 2)$HOME にフォーマットの設定ファイル .perltidyrc を置く
 ;; [Testing the .perltidyrc]
-;; $perltidy -dpro
+;; $ perltidy -dpro
 
 (defun perltidy-region ()
   "Run perltidy based on $HOME/.perltidyrc on the current region."
@@ -1612,6 +1629,8 @@ Use CREATE-TEMP-F for creating temp copy."
   (interactive)
   (save-excursion (mark-defun)
                   (perltidy-region)))
+
+(define-key cperl-mode-map (kbd "C-M-q") 'perltidy-region)
 
 ;; pod-mode
 ;; install
@@ -1853,7 +1872,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (define-key ac-completing-map (kbd "M-/") 'ac-stop)
 
   ;; 補完が自動で起動するのを停止
-  (setq ac-auto-start t)
+  (setq ac-auto-start nil)
 
   ;; 起動キーの設定
   (ac-set-trigger-key "TAB")
@@ -1865,7 +1884,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (setq ac-auto-start 1)
 
   ;; 補完リストが表示されるまでの時間
-  (setq ac-auto-show-menu 0.2)
+  (setq ac-auto-show-menu 0.5)
 
   (defun auto-complete-init-sources ()
     (setq ac-sources '(ac-source-yasnippet
@@ -1880,6 +1899,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (add-to-list 'ac-modes 'js2-mode)
   (add-to-list 'ac-modes 'tmt-mode)
   (add-to-list 'ac-modes 'yaml-mode)
+  (add-to-list 'ac-modes 'sh-mode)
 
   ;; company
   ;; (install-elisp "http://nschum.de/src/emacs/company-mode/company-0.5.tar.bz2")
