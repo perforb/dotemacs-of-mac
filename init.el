@@ -396,7 +396,7 @@ are always included."
 (column-number-mode t)
 
 ;; 全角スペース、タブの強調表示
-(defface my-face-b-1 '((t (:background "medium aquamarine"))) nil)
+(defface my-face-b-1 '((t (:background "#222244"))) nil)
 (defface my-face-b-2 '((t (:background "#222244" :underline t))) nil)
 (defface my-face-u-1 '((t (:foreground "SteelBlue" :underline t))) nil)
 (defvar my-face-b-1 'my-face-b-1)
@@ -823,6 +823,7 @@ are always included."
       '((cperl-mode    . "perl-template.pl")
         (php-mode      . "php-template.php")
         (markdown-mode . "md_template.md")
+        (python-mode   . "python-template.py")
         (html-mode     . "html-template.html")))
 
 ;; ------------------------------------------------------------------------
@@ -975,7 +976,7 @@ are always included."
   (local-set-key (kbd "=") (smartchr '("=" " = " " == " " === ")))
   ;; !! がカーソルの位置
   (local-set-key (kbd "(") (smartchr '("(`!!')" "(")))
-  (local-set-key (kbd "[") (smartchr '("[`!!']" "[[`!!']]" "[")))
+  (local-set-key (kbd "[") (smartchr '("[`!!']" "[" "[[`!!']]")))
   (local-set-key (kbd "{") (smartchr '("{`!!'}" "{\n`!!'\n}" "{")))
   (local-set-key (kbd "`") (smartchr '("\``!!'\`" "\`")))
   (local-set-key (kbd "'") (smartchr '("\'`!!'\'" "\'")))
@@ -992,6 +993,7 @@ are always included."
 (add-hook 'js2-mode-hook 'smartchr-custom-keybindings)
 (add-hook 'ruby-mode-hook 'smartchr-custom-keybindings)
 (add-hook 'cperl-mode-hook 'smartchr-custom-keybindings)
+(add-hook 'python-mode-hook 'smartchr-custom-keybindings)
 (add-hook 'objc-mode-hook 'smartchr-custom-keybindings-objc)
 
 ;; ------------------------------------------------------------------------
@@ -1015,8 +1017,25 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ yasnippet
 
-(require 'yasnippet)
-(yas/global-mode 1)
+(require 'yasnippet) ;; not yasnippet-bundle
+
+;; スニペット展開を <TAB> から <SPC>  に変更
+;; (setq yas/trigger-key "SPC")
+
+;; メニューは使わない
+(setq yas/use-menu nil)
+
+(require 'dropdown-list)
+(setq yas/prompt-functions '(yas/dropdown-prompt))
+
+;; 初期化
+(yas/initialize)
+
+;; スニペットの位置を複数設定します. 同名の snippets はより後ろに設定した方で上書きされます.
+(setq yas/root-directory '("~/.emacs.d/snippets" "~/.emacs.d/plugins/yasnippet/snippets"))
+
+;; yas/load-directory も複数ディレクトリに対応した修正をします
+(mapc 'yas/load-directory yas/root-directory)
 
 ;; References
 ;; https://github.com/capitaomorte/yasnippet
