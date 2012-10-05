@@ -57,7 +57,7 @@
 ;; See http://sakito.jp/emacs/emacsshell.html#path
 ;; See http://d.hatena.ne.jp/peccu/20101116/emacs_evernote
 
-; より下に記述した物が PATH の先頭に追加されます
+;; より下に記述した物が PATH の先頭に追加されます
 (dolist (dir (list
               "/sbin"
               "/usr/sbin"
@@ -72,10 +72,10 @@
               (expand-file-name "~/.perlbrew/perls/perl-5.14.2/bin")
               ))
 
-;; PATH と exec-path に同じ物を追加します
- (when (and (file-exists-p dir) (not (member dir exec-path)))
-   (setenv "PATH" (concat dir ":" (getenv "PATH")))
-   (setq exec-path (append (list dir) exec-path))))
+  ;; PATH と exec-path に同じ物を追加します
+  (when (and (file-exists-p dir) (not (member dir exec-path)))
+    (setenv "PATH" (concat dir ":" (getenv "PATH")))
+    (setq exec-path (append (list dir) exec-path))))
 
 (setenv "GEM_HOME" "~/.rbenv/shims/gem")
 (setenv "RUBYLIB" "~/.emacs.d/lib/ruby/site_ruby/")
@@ -90,7 +90,7 @@
 ;; ------------------------------------------------------------------------
 ;; @ backup file
 
-; #* というバックアップファイルを作らない
+;; #* というバックアップファイルを作らない
 (setq auto-save-default nil)
 
 ;; *.~ というバックアップファイルを作らない
@@ -249,76 +249,76 @@
 ;; See http://d.hatena.ne.jp/tequilasunset/20110103/p1
 ;; See http://idita.blog11.fc2.com/blog-entry-810.html
 (when window-system
-(require 'tabbar)
-(tabbar-mode 1)
+  (require 'tabbar)
+  (tabbar-mode 1)
 
-;; グループ化しない
-(setq tabbar-buffer-groups-function nil)
+  ;; グループ化しない
+  (setq tabbar-buffer-groups-function nil)
 
-;; 左に表示されるボタンを無効化
-(dolist (btn '(tabbar-buffer-home-button
-               tabbar-scroll-left-button
-               tabbar-scroll-right-button))
-  (set btn (cons (cons "" nil)
-                 (cons "" nil))))
+  ;; 左に表示されるボタンを無効化
+  (dolist (btn '(tabbar-buffer-home-button
+                 tabbar-scroll-left-button
+                 tabbar-scroll-right-button))
+    (set btn (cons (cons "" nil)
+                   (cons "" nil))))
 
-;; タブの長さ
-(setq tabbar-separator '(1.5))
+  ;; タブの長さ
+  (setq tabbar-separator '(1.5))
 
-;; 外観変更
-(set-face-attribute
- 'tabbar-default nil
- :family "Migu 1M"
- :background "black"
- :foreground "gray72"
- :height 1.0)
-(set-face-attribute
- 'tabbar-unselected nil
- :background "black"
- :foreground "grey72"
- :box nil)
-(set-face-attribute
- 'tabbar-selected nil
- :background "black"
- :foreground "yellow"
- :box nil)
-(set-face-attribute
- 'tabbar-button nil
- :box nil)
-(set-face-attribute
- 'tabbar-separator nil
- :height 1.5)
+  ;; 外観変更
+  (set-face-attribute
+   'tabbar-default nil
+   :family "Migu 1M"
+   :background "black"
+   :foreground "gray72"
+   :height 1.0)
+  (set-face-attribute
+   'tabbar-unselected nil
+   :background "black"
+   :foreground "grey72"
+   :box nil)
+  (set-face-attribute
+   'tabbar-selected nil
+   :background "black"
+   :foreground "yellow"
+   :box nil)
+  (set-face-attribute
+   'tabbar-button nil
+   :box nil)
+  (set-face-attribute
+   'tabbar-separator nil
+   :height 1.5)
 
-;; タブに表示させるバッファの設定
-(defvar my-tabbar-displayed-buffers
-  '("*scratch*" "*Messages*" "*vc-")
-  "*Regexps matches buffer names always included tabs.")
+  ;; タブに表示させるバッファの設定
+  (defvar my-tabbar-displayed-buffers
+    '("*scratch*" "*Messages*" "*vc-")
+    "*Regexps matches buffer names always included tabs.")
 
-(defun my-tabbar-buffer-list ()
-  "Return the list of buffers to show in tabs.
+  (defun my-tabbar-buffer-list ()
+    "Return the list of buffers to show in tabs.
 Exclude buffers whose name starts with a space or an asterisk.
 The current buffer and buffers matches `my-tabbar-displayed-buffers'
 are always included."
-  (let* ((hides (list ?\  ?\*))
-         (re (regexp-opt my-tabbar-displayed-buffers))
-         (cur-buf (current-buffer))
-         (tabs (delq nil
-                     (mapcar (lambda (buf)
-                               (let ((name (buffer-name buf)))
-                                 (when (or (string-match re name)
-                                           (not (memq (aref name 0) hides)))
-                                   buf)))
-                             (buffer-list)))))
-    ;; Always include the current buffer.
-    (if (memq cur-buf tabs)
-        tabs
-      (cons cur-buf tabs))))
+    (let* ((hides (list ?\  ?\*))
+           (re (regexp-opt my-tabbar-displayed-buffers))
+           (cur-buf (current-buffer))
+           (tabs (delq nil
+                       (mapcar (lambda (buf)
+                                 (let ((name (buffer-name buf)))
+                                   (when (or (string-match re name)
+                                             (not (memq (aref name 0) hides)))
+                                     buf)))
+                               (buffer-list)))))
+      ;; Always include the current buffer.
+      (if (memq cur-buf tabs)
+          tabs
+        (cons cur-buf tabs))))
 
-(setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
+  (setq tabbar-buffer-list-function 'my-tabbar-buffer-list)
 
-;; タブ切り替え
-(global-set-key [C-tab] 'tabbar-forward-tab)
-(global-set-key [C-S-tab] 'tabbar-backward-tab))
+  ;; タブ切り替え
+  (global-set-key [C-tab] 'tabbar-forward-tab)
+  (global-set-key [C-S-tab] 'tabbar-backward-tab))
 
 ;; ------------------------------------------------------------------------
 ;; @ popwin
@@ -824,7 +824,7 @@ are always included."
         (php-mode      . "php-template.php")
         (markdown-mode . "md_template.md")
         (python-mode   . "python-template.py")
-        (html-mode     . "html-template.html")))
+        (nxml-mode     . "html-template.html")))
 
 ;; ------------------------------------------------------------------------
 ;; @ moccur-edit
@@ -1017,25 +1017,10 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ yasnippet
 
-(require 'yasnippet) ;; not yasnippet-bundle
-
-;; スニペット展開を <TAB> から <SPC>  に変更
-;; (setq yas/trigger-key "SPC")
-
-;; メニューは使わない
-(setq yas/use-menu nil)
-
-(require 'dropdown-list)
-(setq yas/prompt-functions '(yas/dropdown-prompt))
-
-;; 初期化
-(yas/initialize)
-
-;; スニペットの位置を複数設定します. 同名の snippets はより後ろに設定した方で上書きされます.
-(setq yas/root-directory '("~/.emacs.d/snippets" "~/.emacs.d/plugins/yasnippet/snippets"))
-
-;; yas/load-directory も複数ディレクトリに対応した修正をします
-(mapc 'yas/load-directory yas/root-directory)
+(require 'yasnippet)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets" "~/.emacs.d/plugins/yasnippet/snippets"))
+(yas-global-mode 1) ;; or M-x yas-reload-all if you've started YASnippet already.
 
 ;; References
 ;; https://github.com/capitaomorte/yasnippet
@@ -1114,27 +1099,24 @@ Use CREATE-TEMP-F for creating temp copy."
              '("\\.\\(?:c\\(?:pp\\|xx\\|\\+\\+\\)?\\|CC\\)\\'"
                flymake-simple-make-gcc-init))
 
-
 ;; XML 用 Flymake の設定
 (defun flymake-xml-init ()
   (list "xmllint" (list "--valid"
                         (flymake-init-create-temp-buffer-copy
                          'flymake-create-temp-inplace))))
 
-
 ;; HTML 用 Flymake の設定
-(defun flymake-html-init ()
-  (list "tidy" (list (flymake-init-create-temp-buffer-copy
-                      'flymake-create-temp-inplace))))
+;; (defun flymake-html-init ()
+;;   (list "tidy" (list (flymake-init-create-temp-buffer-copy
+;;                       'flymake-create-temp-inplace))))
 
-(add-to-list 'flymake-allowed-file-name-masks
-             '("\\.html\\'" flymake-html-init))
+;; (add-to-list 'flymake-allowed-file-name-masks
+;;              '("\\.html\\'" flymake-html-init))
 
-;; tidy error pattern
-(add-to-list 'flymake-err-line-patterns
-             '("line \\([0-9]+\\) column \\([0-9]+\\) - \\(Warning\\|Error\\): \\(.*\\)"
-               nil 1 2 4))
-
+;; ;; tidy error pattern
+;; (add-to-list 'flymake-err-line-patterns
+;;              '("line \\([0-9]+\\) column \\([0-9]+\\) - \\(Warning\\|Error\\): \\(.*\\)"
+;;                nil 1 2 4))
 
 ;; js2 Flymake の初期化関数の定義
 (defun flymake-jsl-init ()
@@ -1223,7 +1205,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; See http://code.google.com/p/zen-coding/wiki/ZenHTMLElementsEn
 
 (require 'zencoding-mode)
-(add-hook 'html-mode-hook 'zencoding-mode)
+(add-hook 'nxml-mode-hook 'zencoding-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1302,38 +1284,65 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; ------------------------------------------------------------------------
 ;; @ html-mode
 
-(setq auto-mode-alist (cons '("\\.html$" . html-mode) auto-mode-alist))
-(setq auto-mode-alist
-      (append '(("\\.html$" . html-mode)
-                ("\\.twig$" . html-mode)
-                ("\\.$" . html-mode))
-              auto-mode-alist))
+;; (setq auto-mode-alist (cons '("\\.html$" . html-mode) auto-mode-alist))
+;; (setq auto-mode-alist
+;;       (append '(("\\.html$" . html-mode)
+;;                 ("\\.twig$" . html-mode)
+;;                 ("\\.$" . html-mode))
+;;               auto-mode-alist))
 
-;; html format
-;; See http://d.hatena.ne.jp/kitokitoki/20101219/p1
-(defun my-html-format-region (begin end)
-  "リージョンの HTML を整形します。なお整形に失敗した場合はバッファ内容のままとなります。"
-  (interactive "r")
-  ;; hamcutlet.rb は PATH から探索できる前提
-  (unless (executable-find "hamcutlet.rb")
-    (error "hamcutlet.rb を利用できません"))
-  (let ((text (buffer-substring-no-properties begin end)))
-    (delete-region begin end)
-    (call-process "hamcutlet.rb" nil t 0 text)))
+;; ;; html format
+;; ;; See http://d.hatena.ne.jp/kitokitoki/20101219/p1
+;; (defun my-html-format-region (begin end)
+;;   "リージョンの HTML を整形します。なお整形に失敗した場合はバッファ内容のままとなります。"
+;;   (interactive "r")
+;;   ;; hamcutlet.rb は PATH から探索できる前提
+;;   (unless (executable-find "hamcutlet.rb")
+;;     (error "hamcutlet.rb を利用できません"))
+;;   (let ((text (buffer-substring-no-properties begin end)))
+;;     (delete-region begin end)
+;;     (call-process "hamcutlet.rb" nil t 0 text)))
 
-(defalias 'htmlf 'my-html-format-region)
-(add-hook 'html-mode-hook
-          '(lambda ()
-             (define-key html-mode-map (kbd "C-M-q") 'my-html-format-region)
-             (setq indent-tabs-mode nil)
-             (setq-default tab-width 4)))
+;; (defalias 'htmlf 'my-html-format-region)
+;; (add-hook 'html-mode-hook
+;;           '(lambda ()
+;;              (define-key html-mode-map (kbd "C-M-q") 'my-html-format-region)
+;;              (setq indent-tabs-mode nil)
+;;              (setq-default tab-width 4)))
+
+;; ------------------------------------------------------------------------
+;; @ nxml-mode
+
+;; HTML編集のデフォルトモードをnxml-modeにする
+(add-to-list 'auto-mode-alist '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . nxml-mode))
+
+;; HTML5
+;; $ cd ~/.emacs.d/plugins
+;; $ git clone git://github.com/hober/html5-el.git
+;; $ cd html5-el
+;; $ make relaxng
+(eval-after-load "rng-loc"
+  '(add-to-list 'rng-schema-locating-files "~/.emacs.d/plugins/html5-el/schemas.xml"))
+(require 'whattf-dt)
+
+;;; nxml-modeの基本設定
+;; </を入力すると自動的にタグを閉じる
+(setq nxml-slash-auto-complete-flag t)
+
+;; M-TABでタグを補完する
+(setq nxml-bind-meta-tab-to-complete-flag t)
+
+;; 子要素のインデント幅を設定する。初期値は2
+(setq nxml-child-indent 2)
+
+;; 属性値のインデント幅を設定する。初期値は4
+(setq nxml-attribute-indent 0)
 
 ;; ------------------------------------------------------------------------
 ;; @ markdown-mode
 
 ;; (install-elisp "http://jblevins.org/projects/markdown-mode/markdown-mode.el")
 ;; http://jblevins.org/projects/markdown-mode/
-
 (autoload 'markdown-mode "markdown-mode.el"
   "Major mode for editing Markdown files" t)
 
@@ -1355,17 +1364,17 @@ Use CREATE-TEMP-F for creating temp copy."
 
 ;; Xcode 上でコンパイル＆実行
 (defun xcode-buildandrun ()
- (interactive)
- (do-applescript
-  (format
-   (concat
-    "tell application \"Xcode\" to activate \r"
-    "tell application \"System Events\" \r"
-    "     tell process \"Xcode\" \r"
-    "          key code 36 using {command down} \r"
-    "    end tell \r"
-    "end tell \r"
-    ))))
+  (interactive)
+  (do-applescript
+   (format
+    (concat
+     "tell application \"Xcode\" to activate \r"
+     "tell application \"System Events\" \r"
+     "     tell process \"Xcode\" \r"
+     "          key code 36 using {command down} \r"
+     "    end tell \r"
+     "end tell \r"
+     ))))
 
 ;; Xcode にブレークポイント追加
 ;; http://d.hatena.ne.jp/kaniza/20090915/p1
@@ -1374,7 +1383,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (let ((line (number-to-string (line-number-at-pos)))
         (file-path buffer-file-name))
     (do-applescript (concat
-     "tell application \"Xcode\"
+                     "tell application \"Xcode\"
         activate
         tell front project
           repeat with r in file references
@@ -1502,12 +1511,12 @@ Use CREATE-TEMP-F for creating temp copy."
 (setq org-log-done t)
 (setq org-tags-column 72)                 ; タグを表示する位置
 (setq org-hide-leading-stars t)           ; 見出しの余計なアスタリスクを表示しない
-;(set-face-foreground 'org-hide "#282828") ; 表示しないアスタリスクの色
+                                        ;(set-face-foreground 'org-hide "#282828") ; 表示しないアスタリスクの色
 (setq org-startup-truncated nil)          ; 開始時にツリーを閉じない
 (setq org-return-follows-link t)
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
 
-; 検索対象にアーカイブを含める
+                                        ; 検索対象にアーカイブを含める
 (setq org-agenda-text-search-extra-files (quote (agenda-archives)))
 
 ;; key bindings
@@ -1577,8 +1586,8 @@ Use CREATE-TEMP-F for creating temp copy."
     (perl-completion-mode t)
     (when (require 'auto-complete nil t)
       (auto-complete-mode t)
-    ;; 補完のキーバインドを変更
-    (define-key cperl-mode-map (kbd "C-o") 'plcmp-cmd-smart-complete)
+      ;; 補完のキーバインドを変更
+      (define-key cperl-mode-map (kbd "C-o") 'plcmp-cmd-smart-complete)
       (make-variable-buffer-local 'ac-sources)
       (setq ac-sources
             '(ac-source-perl-completion)))))
@@ -1914,7 +1923,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (auto-complete-init-sources)
 
   (add-to-list 'ac-modes 'emacs-lisp-mode)
-  (add-to-list 'ac-modes 'html-mode)
+  (add-to-list 'ac-modes 'nxml-mode)
   (add-to-list 'ac-modes 'js2-mode)
   (add-to-list 'ac-modes 'tmt-mode)
   (add-to-list 'ac-modes 'yaml-mode)

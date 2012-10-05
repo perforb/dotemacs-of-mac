@@ -1,3 +1,6 @@
 [submodule "plugins/yasnippet"]
 	path = plugins/yasnippet
 	url = git://github.com/capitaomorte/yasnippet.git
+[submodule "plugins/html5-el"]
+	path = plugins/html5-el
+	url = git://github.com/hober/html5-el.git
