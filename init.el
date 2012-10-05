@@ -44,9 +44,9 @@
 ;; 1) emacsclient <file_name> で編集したいファイルを開く
 ;; 2) 編集完了後は C-x # で終了を通知する
 ;;
-;; See http://d.hatena.ne.jp/syohex/20101224/1293206906
-;; See http://www.kanasansoft.com/weblab/2010/03/git_core_editor_emacs_mac.html
-;; See http://www.bookshelf.jp/texi/emacs-man/21-3/jp/faq_5.html
+;; http://d.hatena.ne.jp/syohex/20101224/1293206906
+;; http://www.kanasansoft.com/weblab/2010/03/git_core_editor_emacs_mac.html
+;; http://www.bookshelf.jp/texi/emacs-man/21-3/jp/faq_5.html
 (require 'server)
 (unless (server-running-p)
   (server-start))
@@ -54,8 +54,8 @@
 ;; ------------------------------------------------------------------------
 ;; @ PATH
 
-;; See http://sakito.jp/emacs/emacsshell.html#path
-;; See http://d.hatena.ne.jp/peccu/20101116/emacs_evernote
+;; http://sakito.jp/emacs/emacsshell.html#path
+;; http://d.hatena.ne.jp/peccu/20101116/emacs_evernote
 
 ;; より下に記述した物が PATH の先頭に追加されます
 (dolist (dir (list
@@ -246,8 +246,8 @@
 ;; @ tabbar
 
 ;; (install-elisp "http://www.emacswiki.org/emacs/download/tabbar.el")
-;; See http://d.hatena.ne.jp/tequilasunset/20110103/p1
-;; See http://idita.blog11.fc2.com/blog-entry-810.html
+;; http://d.hatena.ne.jp/tequilasunset/20110103/p1
+;; http://idita.blog11.fc2.com/blog-entry-810.html
 (when window-system
   (require 'tabbar)
   (tabbar-mode 1)
@@ -323,9 +323,9 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ popwin
 
-;; See http://d.hatena.ne.jp/m2ym/20110120/1295524932
-;; See http://d.hatena.ne.jp/sokutou-metsu/20110205/1296915272
-;; See http://d.hatena.ne.jp/hirose31/20110302/1299062869
+;; http://d.hatena.ne.jp/m2ym/20110120/1295524932
+;; http://d.hatena.ne.jp/sokutou-metsu/20110205/1296915272
+;; http://d.hatena.ne.jp/hirose31/20110302/1299062869
 
 (require 'popwin)
 (setq display-buffer-function 'popwin:display-buffer)
@@ -611,7 +611,7 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ functions
 
-;; See http://d.hatena.ne.jp/kitokitoki/20100425/p1
+;; http://d.hatena.ne.jp/kitokitoki/20100425/p1
 (setq byte-compile-warnings '(free-vars unresolved callargs redefine obsolete noruntime cl-functions interactive-only make-local))
 ;; 現在の日付を挿入
 (defun current-date-string () (interactive) "現在の日付を挿入する" (insert (format-time-string "%Y-%m-%d")))
@@ -649,7 +649,7 @@ are always included."
 (require 'align)
 
 ;; Align for php-mode
-;; See http://d.hatena.ne.jp/Tetsujin/20070614/1181757931
+;; http://d.hatena.ne.jp/Tetsujin/20070614/1181757931
 (add-to-list 'align-rules-list
              '(php-assignment
                (regexp   . "[^-=!^&*+<>/.| \t\n]\\(\\s-*[.-=!^&*+<>/|]*\\)=>?\\(\\s-*\\)\\([^= \t\n]\\|$\\)")
@@ -850,7 +850,7 @@ are always included."
 (define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
 
 ;; ファイルなら別バッファで、ディレクトリなら同じバッファで開く
-;; See http://d.hatena.ne.jp/nishikawasasaki/20120222/1329932699
+;; http://d.hatena.ne.jp/nishikawasasaki/20120222/1329932699
 (defun dired-open-in-accordance-with-situation ()
   (interactive)
   (let ((file (dired-get-filename)))
@@ -864,7 +864,7 @@ are always included."
 (define-key dired-mode-map (kbd "RET") 'dired-open-in-accordance-with-situation)
 (define-key dired-mode-map (kbd "a") 'dired-find-file)
 
-;; See http://d.hatena.ne.jp/oh_cannot_angel/20101216/1292506110
+;; http://d.hatena.ne.jp/oh_cannot_angel/20101216/1292506110
 ;; dired でマークをつけたファイルを開く
 (eval-after-load "dired"
   '(progn
@@ -904,7 +904,7 @@ are always included."
 ;; grep-edit
 ;; 1) M-x auto-install-from-emacswiki grep-edit.el
 ;; [Patch]
-;; See http://d.hatena.ne.jp/tomoya/20090826/1251261798
+;; http://d.hatena.ne.jp/tomoya/20090826/1251261798
 ;; [Summary]
 ;; grep の検索結果を直接編集することで複数ファイルの一括置換が可能となる
 ;; [Usage]
@@ -917,8 +917,8 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ migemo
 
-;; See http://yourpalm.jubenoum.com/2010/08/cocoa-emacs-%E3%81%AB-migemo-%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB/A
-;; See http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
+;; http://yourpalm.jubenoum.com/2010/08/cocoa-emacs-%E3%81%AB-migemo-%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB/A
+;; http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
 ;; make 時に ruby: no such file to load -- romkan (LoadError) という ruby の require 絡みのエラー発生
 ;; このため migemo がうまく動かなかった
 (when window-system
@@ -941,7 +941,7 @@ are always included."
     (keyboard-quit)))
 
 ;; sequential-command
-;; See http://d.hatena.ne.jp/rubikitch/20090219/sequential_command
+;; http://d.hatena.ne.jp/rubikitch/20090219/sequential_command
 ;; (auto-install-batch "sequential-command")
 (require 'sequential-command-config)
 (define-sequential-command seq-home
@@ -956,7 +956,7 @@ are always included."
 (setq uniquify-ignore-buffers-re "*[^*]+*")
 
 ;; sudo-ext
-;; See http://d.hatena.ne.jp/rubikitch/20101018/sudoext
+;; http://d.hatena.ne.jp/rubikitch/20101018/sudoext
 ;; (install-elisp-from-emacswiki "sudo-ext.el")
 (require 'sudo-ext)
 
@@ -968,8 +968,8 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ smartchr
 
-;; See http://sakito.jp/emacs/emacsobjectivec.html
-;; See http://tech.kayac.com/archive/emacs-tips-smartchr.html
+;; http://sakito.jp/emacs/emacsobjectivec.html
+;; http://tech.kayac.com/archive/emacs-tips-smartchr.html
 
 (require 'smartchr)
 (defun smartchr-custom-keybindings ()
@@ -999,7 +999,7 @@ are always included."
 ;; ------------------------------------------------------------------------
 ;; @ text-adjust
 
-;; See http://d.hatena.ne.jp/rubikitch/20090220/text_adjust
+;; http://d.hatena.ne.jp/rubikitch/20090220/text_adjust
 
 ;; 全角文字と半角文字の間に自動でスペースを開ける
 ;;
@@ -1105,19 +1105,6 @@ Use CREATE-TEMP-F for creating temp copy."
                         (flymake-init-create-temp-buffer-copy
                          'flymake-create-temp-inplace))))
 
-;; HTML 用 Flymake の設定
-;; (defun flymake-html-init ()
-;;   (list "tidy" (list (flymake-init-create-temp-buffer-copy
-;;                       'flymake-create-temp-inplace))))
-
-;; (add-to-list 'flymake-allowed-file-name-masks
-;;              '("\\.html\\'" flymake-html-init))
-
-;; ;; tidy error pattern
-;; (add-to-list 'flymake-err-line-patterns
-;;              '("line \\([0-9]+\\) column \\([0-9]+\\) - \\(Warning\\|Error\\): \\(.*\\)"
-;;                nil 1 2 4))
-
 ;; js2 Flymake の初期化関数の定義
 (defun flymake-jsl-init ()
   (list "jsl" (list "-process" (flymake-init-create-temp-buffer-copy
@@ -1201,8 +1188,8 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; @ zencoding-mode
 
 ;; (install-elisp "https://raw.github.com/rooney/zencoding/1f62291a67ee3ef86df0d4a2304395cdfb315b31/zencoding-mode.el")
-;; man http://code.google.com/p/zen-coding
-;; See http://code.google.com/p/zen-coding/wiki/ZenHTMLElementsEn
+;; http://code.google.com/p/zen-coding
+;; http://code.google.com/p/zen-coding/wiki/ZenHTMLElementsEn
 
 (require 'zencoding-mode)
 (add-hook 'nxml-mode-hook 'zencoding-mode)
@@ -1251,9 +1238,9 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; 2) gtags -v
 ;; 3) M-x gtags-mode (gtags-mode を設定していないモードの場合)
 ;;
-;; See http://www.bookshelf.jp/soft/meadow_42.html#SEC638
-;; See http://www.neutralworks.com/blog/emacs/emacsglobalgtags.html
-;; See http://uguisu.skr.jp/Windows/gtags.html
+;; http://www.bookshelf.jp/soft/meadow_42.html#SEC638
+;; http://www.neutralworks.com/blog/emacs/emacsglobalgtags.html
+;; http://uguisu.skr.jp/Windows/gtags.html
 
 ;; (autoload 'gtags-mode "gtags" "" t)
 ;; (setq gtags-mode-hook
@@ -1280,35 +1267,6 @@ Use CREATE-TEMP-F for creating temp copy."
 ;;              (gtags-mode 1)
 ;;              (gtags-make-complete-list)
 ;;              ))
-
-;; ------------------------------------------------------------------------
-;; @ html-mode
-
-;; (setq auto-mode-alist (cons '("\\.html$" . html-mode) auto-mode-alist))
-;; (setq auto-mode-alist
-;;       (append '(("\\.html$" . html-mode)
-;;                 ("\\.twig$" . html-mode)
-;;                 ("\\.$" . html-mode))
-;;               auto-mode-alist))
-
-;; ;; html format
-;; ;; See http://d.hatena.ne.jp/kitokitoki/20101219/p1
-;; (defun my-html-format-region (begin end)
-;;   "リージョンの HTML を整形します。なお整形に失敗した場合はバッファ内容のままとなります。"
-;;   (interactive "r")
-;;   ;; hamcutlet.rb は PATH から探索できる前提
-;;   (unless (executable-find "hamcutlet.rb")
-;;     (error "hamcutlet.rb を利用できません"))
-;;   (let ((text (buffer-substring-no-properties begin end)))
-;;     (delete-region begin end)
-;;     (call-process "hamcutlet.rb" nil t 0 text)))
-
-;; (defalias 'htmlf 'my-html-format-region)
-;; (add-hook 'html-mode-hook
-;;           '(lambda ()
-;;              (define-key html-mode-map (kbd "C-M-q") 'my-html-format-region)
-;;              (setq indent-tabs-mode nil)
-;;              (setq-default tab-width 4)))
 
 ;; ------------------------------------------------------------------------
 ;; @ nxml-mode
@@ -1407,7 +1365,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; ------------------------------------------------------------------------
 ;; @ Objective-C
 
-;; See http://sakito.jp/emacs/emacsobjectivec.html
+;; http://sakito.jp/emacs/emacsobjectivec.html
 
 ;; (add-to-list 'magic-mode-alist '("\\(.\\|\n\\)*\n@implementation" . objc-mode))
 ;; (add-to-list 'magic-mode-alist '("\\(.\\|\n\\)*\n@interface" . objc-mode))
@@ -1594,7 +1552,7 @@ Use CREATE-TEMP-F for creating temp copy."
 
 (add-hook  'cperl-mode-hook 'perl-completion-hook)
 
-;; See http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
+;; http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
 ;; モジュールソースバッファの場合はその場で,
 ;; その他のバッファの場合は別ウィンドウに開く.
 
@@ -1633,7 +1591,7 @@ Use CREATE-TEMP-F for creating temp copy."
             (display-buffer buffer)))))))
 
 ;; コード整形
-;; See http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
+;; http://d.hatena.ne.jp/hakutoitoi/20090208/1234069614
 ;; install
 ;; 1) perltidy $ sudo port install p5-perl-tidy
 ;; 2)$HOME にフォーマットの設定ファイル .perltidyrc を置く
@@ -1946,8 +1904,8 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; ------------------------------------------------------------------------
 ;; @ auto-highlight-symbol
 
-;; See http://hiroki.jp/2011/01/25/1561/#more-1561
-;; See https://github.com/mitsuo-saito/auto-highlight-symbol-mode
+;; http://hiroki.jp/2011/01/25/1561/#more-1561
+;; https://github.com/mitsuo-saito/auto-highlight-symbol-mode
 ;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol-config.el")
 ;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol.el")
 ;; [Usage]
