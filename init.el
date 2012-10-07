@@ -199,6 +199,8 @@
 (defalias 'dtw 'delete-trailing-whitespace)
 (defalias 'tab 'text-adjust-buffer)
 (defalias 'tasb 'text-adjust-space-buffer)
+(defalias 'icd 'insert-current-date)
+(defalias 'ict 'insert-current-time)
 
 ;; ------------------------------------------------------------------------
 ;; @ cua-mode
@@ -613,8 +615,16 @@ are always included."
 
 ;; http://d.hatena.ne.jp/kitokitoki/20100425/p1
 (setq byte-compile-warnings '(free-vars unresolved callargs redefine obsolete noruntime cl-functions interactive-only make-local))
-;; 現在の日付を挿入
-(defun current-date-string () (interactive) "現在の日付を挿入する" (insert (format-time-string "%Y-%m-%d")))
+
+;; 日付を挿入
+(defun insert-current-date ()
+  (interactive)
+    (insert (format-time-string "%Y%m%d")))
+
+;; 現在時刻を挿入
+(defun insert-current-time ()
+  (interactive)
+    (insert (format-time-string "%Y%m%d%H%M%S")))
 
 ;; すべてのバッファを kill
 (defun kill-all-buffers ()
