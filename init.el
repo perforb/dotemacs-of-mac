@@ -393,7 +393,7 @@ are always included."
 (global-linum-mode)
 (setq linum-format "%4d")
 
-;; 行番号、列番号の表示(モードライン)
+;; 行番号、列番号の表示 (モードライン)
 (line-number-mode t)
 (column-number-mode t)
 
@@ -479,24 +479,21 @@ are always included."
 ;; Alt + 矢印でウィンドウを移動する
 ;; (windmove-default-keybindings 'meta) ; Alt の場合は meta を指定
 ;; Mac の Command + 矢印でウィンドウを移動する
-(windmove-default-keybindings 'super) ; Macの人はこちらをオススメ
+(windmove-default-keybindings 'super) ; Mac の人はこちらをオススメ
 
 ;; インデント
 (global-set-key (kbd "C-S-i") 'indent-region)
 
-;; インデントの削除
-(global-set-key (kbd "C-c d") 'delete-indentation)
-
 ;; 行番号を指定して移動
 (global-set-key "\M-g" 'goto-line)
 
-;; 範囲指定していないとき、C-wで前の単語を削除
+;; 範囲指定していないとき、 C-w で前の単語を削除
 (defadvice kill-region (around kill-word-or-kill-region activate)
   (if (and (interactive-p) transient-mark-mode (not mark-active))
       (backward-kill-word 1)
     ad-do-it))
 
-;; minibuffer用
+;; minibuffer 用
 (define-key minibuffer-local-completion-map "\C-w" 'backward-kill-word)
 
 ;; カーソル位置の単語を削除
@@ -616,10 +613,11 @@ are always included."
 ;; http://d.hatena.ne.jp/kitokitoki/20100425/p1
 (setq byte-compile-warnings '(free-vars unresolved callargs redefine obsolete noruntime cl-functions interactive-only make-local))
 
+;; http://www.fan.gr.jp/~ring/doc/elisp_20/elisp_38.html#SEC609
 ;; 日付を挿入
 (defun insert-current-date ()
   (interactive)
-    (insert (format-time-string "%Y%m%d")))
+    (insert (format-time-string "%a, %b. %d, %Y")))
 
 ;; 現在時刻を挿入
 (defun insert-current-time ()
@@ -1281,7 +1279,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; ------------------------------------------------------------------------
 ;; @ nxml-mode
 
-;; HTML編集のデフォルトモードをnxml-modeにする
+;; HTML 編集のデフォルトモードを nxml-mode にする
 (add-to-list 'auto-mode-alist '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . nxml-mode))
 
 ;; HTML5
@@ -1293,17 +1291,17 @@ Use CREATE-TEMP-F for creating temp copy."
   '(add-to-list 'rng-schema-locating-files "~/.emacs.d/plugins/html5-el/schemas.xml"))
 (require 'whattf-dt)
 
-;;; nxml-modeの基本設定
-;; </を入力すると自動的にタグを閉じる
+;;; nxml-mode の基本設定
+;; </ を入力すると自動的にタグを閉じる
 (setq nxml-slash-auto-complete-flag t)
 
-;; M-TABでタグを補完する
+;; M-TAB でタグを補完する
 (setq nxml-bind-meta-tab-to-complete-flag t)
 
-;; 子要素のインデント幅を設定する。初期値は2
+;; 子要素のインデント幅を設定する。初期値は 2
 (setq nxml-child-indent 2)
 
-;; 属性値のインデント幅を設定する。初期値は4
+;; 属性値のインデント幅を設定する。初期値は 4
 (setq nxml-attribute-indent 0)
 
 ;; ------------------------------------------------------------------------
@@ -1540,7 +1538,7 @@ Use CREATE-TEMP-F for creating temp copy."
       cperl-brace-offset -4                        ; ブレースのオフセット
       cperl-label-offset -4                        ; label のオフセット
       cperl-indent-parens-as-block t               ; 括弧もブロックとしてインデント
-      cperl-close-paren-offset -4                  ; 閉じ括弧のオフセットn
+      cperl-close-paren-offset -4                  ; 閉じ括弧のオフセット n
       cperl-tab-always-indent t                    ; TAB をインデントにする
       cperl-indent-region-fix-constructs t
       cperl-highlight-variables-indiscriminately t ; スカラを常にハイライトする
@@ -1790,8 +1788,6 @@ Use CREATE-TEMP-F for creating temp copy."
 
 ;; M-x package-install RET python-mode RET
 
-;; nothing to do
-
 ;; ------------------------------------------------------------------------
 ;; @ ruby-mode
 
@@ -1840,9 +1836,6 @@ Use CREATE-TEMP-F for creating temp copy."
 
 (require 'yaml-mode)
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-hook 'yaml-mode-hook
-          '(lambda ()
-             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
 
 ;; for yaml-mode
 (add-hook 'yaml-mode-hook
@@ -1925,3 +1918,29 @@ Use CREATE-TEMP-F for creating temp copy."
 
 (require 'auto-highlight-symbol)
 (global-auto-highlight-symbol-mode t)
+
+;; ------------------------------------------------------------------------
+;; @ fill-column-indicator
+
+;; http://www.emacswiki.org/FillColumnIndicator
+;; Usage: M-x fci-mode
+(require 'fill-column-indicator)
+(setq fci-rule-width 1)
+(setq fci-rule-color "darkblue")
+(setq-default fci-rule-column 80)
+
+;; ------------------------------------------------------------------------
+;; @ Auto Indentation
+
+;; http://emacswiki.org/emacs/AutoIndentation
+(defun set-newline-and-indent ()
+  (local-set-key (kbd "RET") 'newline-and-indent))
+
+(add-hook 'lisp-mode-hook 'set-newline-and-indent)
+(add-hook 'yaml-mode-hook 'set-newline-and-indent)
+(add-hook 'js2-mode-hook 'set-newline-and-indent)
+(add-hook 'cperl-mode-hook 'set-newline-and-indent)
+(add-hook 'python-mode-hook 'set-newline-and-indent)
+(add-hook 'ruby-mode-hook 'set-newline-and-indent)
+(add-hook 'php-mode-hook 'set-newline-and-indent)
+(add-hook 'nxml-mode-hook 'set-newline-and-indent)
