@@ -181,6 +181,11 @@
 ;; save-buffer 時、 buffer 末尾に空行が常にあるように
 (setq require-final-newline t)
 
+(add-hook 'emacs-lisp-mode-hook
+          '(lambda ()
+             (local-set-key (kbd "C-c e") 'eval-region)
+             (setq indent-tabs-mode nil)))
+
 ;; ------------------------------------------------------------------------
 ;; @ auto-async-byte-compile
 
@@ -245,11 +250,35 @@
       (setq ns-pop-up-frames nil)))
 
 ;; ------------------------------------------------------------------------
+;; @ session
+
+;; http://d.hatena.ne.jp/whitypig/20110331/1301521329
+;; http://openlab.dino.co.jp/2008/09/26/230919351.html
+;; installed from ELPA
+
+(when (require 'session nil t)
+  (setq session-save-file-coding-system 'utf-8-unix)
+  (setq session-save-file (expand-file-name "~/.emacs.d/.session.dat"))
+  (setq session-initialize '(session places))
+  (setq session-globals-max-size 1024)
+  (setq session-globals-max-string (* 1024 1024))
+  (setq session-globals-include '((kill-ring 512)
+                                  (session-file-alist 512)
+                                  (file-name-history 512)
+                                  (tags-table-set-list 128)
+                                  (tags-table-list 128)))
+  (add-hook 'after-init-hook 'session-initialize)
+  (setq session-undo-check -1)
+  ;; Save session info every 30 minutes
+  (setq my-timer-for-session-save-session (run-at-time t 1800 'session-save-session)))
+
+;; ------------------------------------------------------------------------
 ;; @ tabbar
 
 ;; (install-elisp "http://www.emacswiki.org/emacs/download/tabbar.el")
 ;; http://d.hatena.ne.jp/tequilasunset/20110103/p1
 ;; http://idita.blog11.fc2.com/blog-entry-810.html
+
 (when window-system
   (require 'tabbar)
   (tabbar-mode 1)
@@ -293,7 +322,7 @@
 
   ;; タブに表示させるバッファの設定
   (defvar my-tabbar-displayed-buffers
-    '("*scratch*" "*Messages*" "*vc-")
+    '("*scratch*" "*Messages*" "*Python*" "*eshell*")
     "*Regexps matches buffer names always included tabs.")
 
   (defun my-tabbar-buffer-list ()
@@ -780,32 +809,6 @@ are always included."
   (global-set-key (kbd "C-M-o") 'anything-c-moccur-occur-by-moccur))
 
 ;; ------------------------------------------------------------------------
-;; @ tag
-
-;; Anything から TAGS を利用しやすくするコマンド作成
-(when (and (require 'anything-exuberant-ctags nil t)
-           (require 'anything-gtags nil t))
-  ;; anything-for-tags 用のソースを定義
-  (setq anything-for-tags
-        (list anything-c-source-imenu
-              anything-c-source-gtags-select
-              ;; etags を利用する場合はコメントを外す
-              ;; anything-c-source-etags-select
-              anything-c-source-exuberant-ctags-select
-              ))
-
-  ;; anything-for-tags コマンドを作成
-  (defun anything-for-tags ()
-    "Preconfigured `anything' for anything-for-tags."
-    (interactive)
-    (anything anything-for-tags
-              (thing-at-point 'symbol)
-              nil nil nil "*anything for tags*"))
-
-  ;; M-t に anything-for-current を割り当て
-  (define-key global-map (kbd "M-t") 'anything-for-tags))
-
-;; ------------------------------------------------------------------------
 ;; @ auto-install
 
 (require 'auto-install)
@@ -1038,6 +1041,72 @@ are always included."
 ;; http://sakito.jp/emacs/emacsobjectivec.html
 
 ;; ------------------------------------------------------------------------
+;; @ auto-complete
+
+(when (require 'auto-complete-config nil t)
+  ;; (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+
+  ;; 辞書補完
+  ;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/conf/ac-dict")
+
+  ;; サンプル設定の有効化
+  (ac-config-default)
+
+  ;; 補完ウィンドウ内でのキー定義
+  (define-key ac-completing-map (kbd "C-n") 'ac-next)
+  (define-key ac-completing-map (kbd "C-p") 'ac-previous)
+  (define-key ac-completing-map (kbd "M-/") 'ac-stop)
+
+  ;; 補完が自動で起動するのを停止
+  (setq ac-auto-start nil)
+
+  ;; 起動キーの設定
+  (ac-set-trigger-key "TAB")
+
+  ;; 候補の最大件数 デフォルトは 10 件
+  (setq ac-candidate-max 20)
+
+  ;; 補完を開始する文字数
+  (setq ac-auto-start 1)
+
+  ;; 補完リストが表示されるまでの時間
+  (setq ac-auto-show-menu 0.5)
+
+  (defun auto-complete-init-sources ()
+    (setq ac-sources '(ac-source-yasnippet
+                       ac-source-dictionary
+                       ac-source-gtags
+                       ac-source-words-in-buffer)))
+
+  (auto-complete-init-sources)
+
+  (add-to-list 'ac-modes 'emacs-lisp-mode)
+  (add-to-list 'ac-modes 'nxml-mode)
+  (add-to-list 'ac-modes 'js2-mode)
+  (add-to-list 'ac-modes 'tmt-mode)
+  (add-to-list 'ac-modes 'yaml-mode)
+  (add-to-list 'ac-modes 'sh-mode)
+  (add-to-list 'ac-modes 'python-2-mode)
+
+  ;; company
+  ;; (install-elisp "http://nschum.de/src/emacs/company-mode/company-0.5.tar.bz2")
+
+  ;; ac-company
+  ;; (install-elisp "https://raw.github.com/buzztaiki/auto-complete/master/ac-company.el")
+  (require 'ac-company)
+
+  ;; ac-python
+  ;; http://d.hatena.ne.jp/CortYuming/20111224/p1#
+  (require 'ac-python)
+
+  ;; for emacs-lisp-mode
+  (add-hook 'emacs-lisp-mode-hook
+            '(lambda ()
+               (auto-complete-init-sources)
+               (add-to-list 'ac-sources 'ac-source-functions)
+               (add-to-list 'ac-sources 'ac-source-symbols))))
+
+;; ------------------------------------------------------------------------
 ;; @ flymake
 
 (require 'flymake)
@@ -1223,6 +1292,32 @@ Use CREATE-TEMP-F for creating temp copy."
              ))
 
 ;; ------------------------------------------------------------------------
+;; @ anything-for-tags
+
+;; Anything から TAGS を利用しやすくするコマンド作成
+(when (and (require 'anything-exuberant-ctags nil t)
+           (require 'anything-gtags nil t))
+  ;; anything-for-tags 用のソースを定義
+  (setq anything-for-tags
+        (list anything-c-source-imenu
+              anything-c-source-gtags-select
+              ;; etags を利用する場合はコメントを外す
+              anything-c-source-etags-select
+              anything-c-source-exuberant-ctags-select
+              ))
+
+  ;; anything-for-tags コマンドを作成
+  (defun anything-for-tags ()
+    "Preconfigured `anything' for anything-for-tags."
+    (interactive)
+    (anything anything-for-tags
+              (thing-at-point 'symbol)
+              nil nil nil "*anything for tags*"))
+
+  ;; M-t に anything-for-current を割り当て
+  (define-key global-map (kbd "M-t") 'anything-for-tags))
+
+;; ------------------------------------------------------------------------
 ;; @ ctags
 
 (require 'ctags nil t)
@@ -1233,10 +1328,6 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; anything-exuberant-ctags.el を利用しない場合はコメントアウトする
 (setq ctags-command "ctags -R --fields=\"+afikKlmnsSzt\" ")
 (global-set-key (kbd "<f5>") 'ctags-create-or-update-tags-table)
-(add-hook 'emacs-lisp-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "C-c e") 'eval-region)
-             (setq indent-tabs-mode nil)))
 
 ;; ------------------------------------------------------------------------
 ;; @ gtags
@@ -1788,6 +1879,9 @@ Use CREATE-TEMP-F for creating temp copy."
 
 ;; M-x package-install RET python-mode RET
 
+;; (setq ipython-command (expand-file-name "~/.pythonbrew/pythons/Python-2.7.3/bin/ipython"))
+;; (require 'ipython)
+
 ;; ------------------------------------------------------------------------
 ;; @ ruby-mode
 
@@ -1834,105 +1928,44 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; ------------------------------------------------------------------------
 ;; @ yaml
 
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-
-;; for yaml-mode
-(add-hook 'yaml-mode-hook
-          '(lambda ()
-             (auto-complete-init-sources)
-             (setq ac-sources '(ac-source-words-in-buffer))))
-
-;; ------------------------------------------------------------------------
-;; @ auto-complete
-
-(when (require 'auto-complete-config nil t)
-  ;; (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
-
-  ;; 辞書補完
-  ;; (add-to-list 'ac-dictionary-directories "~/.emacs.d/conf/ac-dict")
-
-  ;; サンプル設定の有効化
-  (ac-config-default)
-
-  ;; 補完ウィンドウ内でのキー定義
-  (define-key ac-completing-map (kbd "C-n") 'ac-next)
-  (define-key ac-completing-map (kbd "C-p") 'ac-previous)
-  (define-key ac-completing-map (kbd "M-/") 'ac-stop)
-
-  ;; 補完が自動で起動するのを停止
-  (setq ac-auto-start nil)
-
-  ;; 起動キーの設定
-  (ac-set-trigger-key "TAB")
-
-  ;; 候補の最大件数 デフォルトは 10 件
-  (setq ac-candidate-max 20)
-
-  ;; 補完を開始する文字数
-  (setq ac-auto-start 1)
-
-  ;; 補完リストが表示されるまでの時間
-  (setq ac-auto-show-menu 0.5)
-
-  (defun auto-complete-init-sources ()
-    (setq ac-sources '(ac-source-yasnippet
-                       ac-source-dictionary
-                       ac-source-gtags
-                       ac-source-words-in-buffer)))
-
-  (auto-complete-init-sources)
-
-  (add-to-list 'ac-modes 'emacs-lisp-mode)
-  (add-to-list 'ac-modes 'nxml-mode)
-  (add-to-list 'ac-modes 'js2-mode)
-  (add-to-list 'ac-modes 'tmt-mode)
-  (add-to-list 'ac-modes 'yaml-mode)
-  (add-to-list 'ac-modes 'sh-mode)
-
-  ;; company
-  ;; (install-elisp "http://nschum.de/src/emacs/company-mode/company-0.5.tar.bz2")
-
-  ;; ac-company
-  ;; (install-elisp "https://raw.github.com/buzztaiki/auto-complete/master/ac-company.el")
-  (require 'ac-company)
-
-  ;; for emacs-lisp-mode
-  (add-hook 'emacs-lisp-mode-hook
+(when (require 'yaml-mode nil t)
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+  (add-hook 'yaml-mode-hook
             '(lambda ()
                (auto-complete-init-sources)
-               (add-to-list 'ac-sources 'ac-source-functions)
-               (add-to-list 'ac-sources 'ac-source-symbols))))
+               (setq ac-sources '(ac-source-words-in-buffer)))))
 
 ;; ------------------------------------------------------------------------
 ;; @ auto-highlight-symbol
 
+;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol.el")
+;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol-config.el")
 ;; http://hiroki.jp/2011/01/25/1561/#more-1561
 ;; https://github.com/mitsuo-saito/auto-highlight-symbol-mode
-;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol-config.el")
-;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol.el")
-;; [Usage]
-;; 変数の上のカーソルをおいて、 C-x C-a とすると、現在ハイライトされている変数の名前を全部一括して変更できる。
-;; しかし、表示されていない部分は変更されないので注意する必要がある。
-;;______________________________________________________________________
+;; Note:
+;; 変数上にカーソルをおいて C-x C-a をタイプすることで、現在ハイライトされている変数の名前を全部一括して変更できる。
+;; ただし、表示されていない部分は変更されないので注意する必要がある。
 
-(require 'auto-highlight-symbol)
-(global-auto-highlight-symbol-mode t)
+(when (require 'auto-highlight-symbol nil t)
+(global-auto-highlight-symbol-mode t))
 
 ;; ------------------------------------------------------------------------
 ;; @ fill-column-indicator
 
 ;; http://www.emacswiki.org/FillColumnIndicator
 ;; Usage: M-x fci-mode
-(require 'fill-column-indicator)
+
+(when (require 'fill-column-indicator nil t)
 (setq fci-rule-width 1)
 (setq fci-rule-color "darkblue")
-(setq-default fci-rule-column 80)
+(setq-default fci-rule-column 80))
 
 ;; ------------------------------------------------------------------------
 ;; @ Auto Indentation
 
 ;; http://emacswiki.org/emacs/AutoIndentation
+
 (defun set-newline-and-indent ()
   (local-set-key (kbd "RET") 'newline-and-indent))
 
