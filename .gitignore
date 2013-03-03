@@ -1,11 +1,9 @@
-.git
 *.elc
 !.gitignore
-src/
-url/
+url
+var
 auto-save-list
 *.dat
-ede-projects.el
 newsticker
 *history
 tramp

@@ -1,7 +1,7 @@
 (require 'cl)
 
 ;; ------------------------------------------------------------------------
-;; @ load-path
+;; @load-path
 
 ;; load-path を追加する関数を定義
 (defun add-to-load-path (&rest paths)
@@ -17,7 +17,7 @@
 (add-to-load-path "elisp" "plugins")
 
 ;; ------------------------------------------------------------------------
-;; @ ELPA
+;; @ELPA
 
 ;; package.el の設定
 ;; (install-elisp "http://bit.ly/pkg-el23")
@@ -30,13 +30,13 @@
   (package-initialize))
 
 ;; ------------------------------------------------------------------------
-;; @ dired-find-alternate-file
+;; @dired-find-alternate-file
 
 ;; dired-find-alternate-file の有効化
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; ------------------------------------------------------------------------
-;; @ emacsclient
+;; @emacsclient
 
 ;; This definition is to use the emacsclient.
 ;;
@@ -52,7 +52,7 @@
   (server-start))
 
 ;; ------------------------------------------------------------------------
-;; @ PATH
+;; @PATH
 
 ;; http://sakito.jp/emacs/emacsshell.html#path
 ;; http://d.hatena.ne.jp/peccu/20101116/emacs_evernote
@@ -66,7 +66,6 @@
               "/sw/bin"
               "/usr/local/share/python"
               "/usr/local/bin"
-              (expand-file-name "~/.emacs.d/lib/ruby/site_ruby")
               (expand-file-name "~/bin")
               (expand-file-name "~/.perlbrew/bin")
               (expand-file-name "~/.perlbrew/perls/perl-5.14.2/bin")
@@ -77,18 +76,15 @@
     (setenv "PATH" (concat dir ":" (getenv "PATH")))
     (setq exec-path (append (list dir) exec-path))))
 
-(setenv "GEM_HOME" "~/.rbenv/shims/gem")
-(setenv "RUBYLIB" "~/.emacs.d/lib/ruby/site_ruby/")
-
 ;; ------------------------------------------------------------------------
-;; @ Custom key
+;; @Custom key
 
 ;; Command キーを Meta に、 Option を SUPER キー（ Win キー）に入れ替え
 (setq ns-command-modifier (quote meta))
 (setq ns-alternate-modifier (quote super))
 
 ;; ------------------------------------------------------------------------
-;; @ backup file
+;; @backup file
 
 ;; #* というバックアップファイルを作らない
 (setq auto-save-default nil)
@@ -97,7 +93,7 @@
 (setq make-backup-files nil)
 
 ;; ------------------------------------------------------------------------
-;; @ etc
+;; @etc
 
 ;; sticky
 ;; (require 'sticky)
@@ -187,7 +183,7 @@
              (setq indent-tabs-mode nil)))
 
 ;; ------------------------------------------------------------------------
-;; @ auto-async-byte-compile
+;; @auto-async-byte-compile
 
 ;; Warning: elisp ファイル上にエラーがある場合はバイトコンパイルされないので注意
 (require 'auto-async-byte-compile)
@@ -197,7 +193,7 @@
 (add-hook 'emacs-lisp-mode-hook 'enable-auto-async-byte-compile-mode)
 
 ;; ------------------------------------------------------------------------
-;; @ alias
+;; @alias
 
 (defalias 'qr  'query-replace)
 (defalias 'qrr 'query-replace-regexp)
@@ -208,7 +204,7 @@
 (defalias 'ict 'insert-current-time)
 
 ;; ------------------------------------------------------------------------
-;; @ cua-mode
+;; @cua-mode
 
 ;; cua-mode をオン
 (cua-mode t)
@@ -217,7 +213,7 @@
 (setq cua-enable-cua-keys nil)
 
 ;; ------------------------------------------------------------------------
-;; @ display
+;; @display
 
 ;; font and frame setting
 (if window-system
@@ -250,7 +246,7 @@
       (setq ns-pop-up-frames nil)))
 
 ;; ------------------------------------------------------------------------
-;; @ session
+;; @session
 
 ;; http://d.hatena.ne.jp/whitypig/20110331/1301521329
 ;; http://openlab.dino.co.jp/2008/09/26/230919351.html
@@ -273,7 +269,7 @@
   (setq my-timer-for-session-save-session (run-at-time t 1800 'session-save-session)))
 
 ;; ------------------------------------------------------------------------
-;; @ tabbar
+;; @tabbar
 
 ;; (install-elisp "http://www.emacswiki.org/emacs/download/tabbar.el")
 ;; http://d.hatena.ne.jp/tequilasunset/20110103/p1
@@ -352,7 +348,7 @@ are always included."
   (global-set-key [C-S-tab] 'tabbar-backward-tab))
 
 ;; ------------------------------------------------------------------------
-;; @ popwin
+;; @popwin
 
 ;; http://d.hatena.ne.jp/m2ym/20110120/1295524932
 ;; http://d.hatena.ne.jp/sokutou-metsu/20110205/1296915272
@@ -365,7 +361,7 @@ are always included."
 (push '(dired-mode :position right) popwin:special-display-config)
 
 ;; ------------------------------------------------------------------------
-;; @ color-theme
+;; @color-theme
 
 ;; カラーテーマ (http://www.nongnu.org/color-theme/)
 ;; テーマサンプル (http://code.google.com/p/gnuemacscolorthemetest/)
@@ -377,7 +373,7 @@ are always included."
 ;;      (color-theme-midnight)))
 
 ;; ------------------------------------------------------------------------
-;; @ color
+;; @color
 
 (set-foreground-color                                  "#ffffff") ; 文字色
 (set-background-color                                  "#000000") ; 背景色
@@ -409,7 +405,7 @@ are always included."
 (set-face-background 'hl-line "#222244")
 
 ;; ------------------------------------------------------------------------
-;; @ etc
+;; @etc
 
 ;; paren-mode 対応する括弧を強調表示
 (setq show-paren-delay 0)
@@ -472,8 +468,11 @@ are always included."
 ;;; yes で答る部分も y で答えられるように
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+;; ediff 関連のバッファを１つのフレームにまとめる
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
 ;; ------------------------------------------------------------------------
-;; @ encoding
+;; @encoding
 
 (set-language-environment 'Japanese)
 (prefer-coding-system 'utf-8-unix)
@@ -484,7 +483,7 @@ are always included."
 (set-clipboard-coding-system 'utf-8)
 
 ;; ------------------------------------------------------------------------
-;; @ key binding
+;; @key binding
 
 ;; recentf-open-files を SUPER-f に割り当て
 ;; キーバインド設定参考 http://d.hatena.ne.jp/tomoya/20090415/1239809615
@@ -602,7 +601,7 @@ are always included."
 (global-set-key (kbd "<M-s-down>") 'duplicate-line-forward)
 
 ;; ------------------------------------------------------------------------
-;; @ speedbar
+;; @speedbar
 
 (defun my-speedbar-expand-line ()
   (interactive)
@@ -637,7 +636,7 @@ are always included."
 (global-set-key [(meta f4)] 'speedbar-get-focus)
 
 ;; ------------------------------------------------------------------------
-;; @ functions
+;; @functions
 
 ;; http://d.hatena.ne.jp/kitokitoki/20100425/p1
 (setq byte-compile-warnings '(free-vars unresolved callargs redefine obsolete noruntime cl-functions interactive-only make-local))
@@ -681,7 +680,7 @@ are always included."
   (princ (string-width (buffer-substring start end))))
 
 ;; ------------------------------------------------------------------------
-;; @ align
+;; @align
 
 (require 'align)
 
@@ -744,7 +743,7 @@ are always included."
                                     ))
 
 ;; ------------------------------------------------------------------------
-;; @ anything
+;; @anything
 
 ;; Install
 ;; (auto-install-batch "anything")
@@ -772,10 +771,6 @@ are always included."
 
   (require 'anything-match-plugin nil t)
 
-  (when (and (executable-find "cmigemo")
-             (require 'migemo nil t))
-    (require 'anything-migemo nil t))
-
   (when (require 'anything-complete nil t)
     ;; lisp シンボルの補完候補の再検索時間
     (anything-lisp-complete-symbol-set-timer 150))
@@ -793,7 +788,7 @@ are always included."
 (define-key global-map (kbd "M-y") 'anything-show-kill-ring)
 
 ;; ------------------------------------------------------------------------
-;; @ anything-c-moccur
+;; @anything-c-moccur
 
 (when (require 'anything-c-moccur nil t)
   (setq
@@ -809,23 +804,21 @@ are always included."
   (global-set-key (kbd "C-M-o") 'anything-c-moccur-occur-by-moccur))
 
 ;; ------------------------------------------------------------------------
-;; @ auto-install
+;; @auto-install
 
 (require 'auto-install)
+
 ;; インストール先
 (setq auto-install-directory "~/.emacs.d/elisp/")
 
 ;; 起動時に EmacsWiki のページ名を補完候補に加える
-(auto-install-update-emacswiki-package-name t)
+;; (auto-install-update-emacswiki-package-name t)
 
 ;; install.elisp.el 互換モードにする
 (auto-install-compatibility-setup)
 
-;; ediff 関連のバッファを１つのフレームにまとめる
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
 ;; ------------------------------------------------------------------------
-;; @ auto-insert
+;; @auto-insert
 
 ;; ファイル形式に応じて自動でテンプレート挿入
 (add-hook 'find-file-hooks 'auto-insert)
@@ -834,11 +827,12 @@ are always included."
       '((cperl-mode    . "perl-template.pl")
         (php-mode      . "php-template.php")
         (markdown-mode . "md_template.md")
+        (ruby-mode     . "ruby-template.rb")
         (python-mode   . "python-template.py")
         (nxml-mode     . "html-template.html")))
 
 ;; ------------------------------------------------------------------------
-;; @ moccur-edit
+;; @moccur-edit
 
 ;; [Summary]
 ;; M-x auto-install-from-emacswiki moccur-edit.el
@@ -846,13 +840,9 @@ are always included."
 (require 'moccur-edit)
 (setq moccur-split-word t)
 (require 'color-moccur)
-(cua-mode t)
-(setq cua-enable-cua-keys nil)
-
-(global-set-key (kbd "C-c C-r") 'cua-toggle-rectangle-mark)
 
 ;; ------------------------------------------------------------------------
-;; @ dired
+;; @dired
 
 ;; dired-x
 (require 'dired-x)
@@ -897,7 +887,7 @@ are always included."
          (mapc 'view-file fn-list)))))
 
 ;; ------------------------------------------------------------------------
-;; @ grep
+;; @grep
 
 ;; igrep
 ;; 1) M-x auto-install-from-emacswiki igrep.el
@@ -926,23 +916,7 @@ are always included."
 (require 'grep-edit)
 
 ;; ------------------------------------------------------------------------
-;; @ migemo
-
-;; http://yourpalm.jubenoum.com/2010/08/cocoa-emacs-%E3%81%AB-migemo-%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB/A
-;; http://plus-alpha-space.cocolog-nifty.com/blog/2009/12/carbon-emacsmig.html
-;; make 時に ruby: no such file to load -- romkan (LoadError) という ruby の require 絡みのエラー発生
-;; このため migemo がうまく動かなかった
-(when window-system
-  (setq migemo-command "migemo")
-  (setq migemo-options '("-t" "emacs"))
-  (setq migemo-dictionary (expand-file-name "~/.emacs.d/lib/migemo/migemo-dict"))
-  (setq migemo-user-dictionary nil)
-  (setq migemo-regex-dictionary nil)
-  (require 'migemo)
-  (migemo-init))
-
-;; ------------------------------------------------------------------------
-;; @ utility
+;; @utility
 
 ;; 終了前に確認する
 (defadvice save-buffers-kill-emacs
@@ -977,7 +951,7 @@ are always included."
 (setq open-junk-file-format "~/junk/%Y/%m/%Y%m%d_%H%M%S.")
 
 ;; ------------------------------------------------------------------------
-;; @ smartchr
+;; @smartchr
 
 ;; http://sakito.jp/emacs/emacsobjectivec.html
 ;; http://tech.kayac.com/archive/emacs-tips-smartchr.html
@@ -992,7 +966,7 @@ are always included."
   (local-set-key (kbd "`") (smartchr '("\``!!'\`" "\`")))
   (local-set-key (kbd "'") (smartchr '("\'`!!'\'" "\'")))
   (local-set-key (kbd "\"") (smartchr '("\"`!!'\"" "\"")))
-  (local-set-key (kbd ">") (smartchr '(">" "->" ">>")))
+  (local-set-key (kbd ">") (smartchr '(">" " > " "->" " => " ">>")))
   )
 
 (defun smartchr-custom-keybindings-objc ()
@@ -1008,7 +982,7 @@ are always included."
 (add-hook 'objc-mode-hook 'smartchr-custom-keybindings-objc)
 
 ;; ------------------------------------------------------------------------
-;; @ text-adjust
+;; @text-adjust
 
 ;; http://d.hatena.ne.jp/rubikitch/20090220/text_adjust
 
@@ -1026,7 +1000,7 @@ are always included."
 ;;(add-hook 'before-save-hook 'text-adjust-space-before-save-if-needed)
 
 ;; ------------------------------------------------------------------------
-;; @ yasnippet
+;; @yasnippet
 
 (require 'yasnippet)
 (setq yas-snippet-dirs
@@ -1041,7 +1015,7 @@ are always included."
 ;; http://sakito.jp/emacs/emacsobjectivec.html
 
 ;; ------------------------------------------------------------------------
-;; @ auto-complete
+;; @auto-complete
 
 (when (require 'auto-complete-config nil t)
   ;; (define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
@@ -1107,7 +1081,7 @@ are always included."
                (add-to-list 'ac-sources 'ac-source-symbols))))
 
 ;; ------------------------------------------------------------------------
-;; @ flymake
+;; @flymake
 
 (require 'flymake)
 
@@ -1217,7 +1191,7 @@ Use CREATE-TEMP-F for creating temp copy."
   )
 
 ;; ------------------------------------------------------------------------
-;; @ gist
+;; @gist
 
 ;; (install-elisp "https://github.com/defunkt/gist.el/raw/master/gist.el")
 (require 'gist)
@@ -1227,7 +1201,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (require 'anything-gist)
 
 ;; ------------------------------------------------------------------------
-;; @ js2-mode
+;; @js2-mode
 
 ;; References
 ;; http://d.hatena.ne.jp/m-hiyama/20080627/1214549228
@@ -1262,7 +1236,7 @@ Use CREATE-TEMP-F for creating temp copy."
               (set (make-local-variable 'indent-line-function) 'js-indent-line)))
 
 ;; ------------------------------------------------------------------------
-;; @ zencoding-mode
+;; @zencoding-mode
 
 ;; (install-elisp "https://raw.github.com/rooney/zencoding/1f62291a67ee3ef86df0d4a2304395cdfb315b31/zencoding-mode.el")
 ;; http://code.google.com/p/zen-coding
@@ -1292,7 +1266,7 @@ Use CREATE-TEMP-F for creating temp copy."
              ))
 
 ;; ------------------------------------------------------------------------
-;; @ anything-for-tags
+;; @anything-for-tags
 
 ;; Anything から TAGS を利用しやすくするコマンド作成
 (when (and (require 'anything-exuberant-ctags nil t)
@@ -1318,7 +1292,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (define-key global-map (kbd "M-t") 'anything-for-tags))
 
 ;; ------------------------------------------------------------------------
-;; @ ctags
+;; @ctags
 
 (require 'ctags nil t)
 (setq tags-revert-without-query t)
@@ -1330,7 +1304,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (global-set-key (kbd "<f5>") 'ctags-create-or-update-tags-table)
 
 ;; ------------------------------------------------------------------------
-;; @ gtags
+;; @gtags
 
 ;; [Usage]
 ;; 1) cd /path/to/pjhome
@@ -1368,7 +1342,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;;              ))
 
 ;; ------------------------------------------------------------------------
-;; @ nxml-mode
+;; @nxml-mode
 
 ;; HTML 編集のデフォルトモードを nxml-mode にする
 (add-to-list 'auto-mode-alist '("\\.[sx]?html?\\(\\.[a-zA-Z_]+\\)?\\'" . nxml-mode))
@@ -1396,7 +1370,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (setq nxml-attribute-indent 0)
 
 ;; ------------------------------------------------------------------------
-;; @ markdown-mode
+;; @markdown-mode
 
 ;; (install-elisp "http://jblevins.org/projects/markdown-mode/markdown-mode.el")
 ;; http://jblevins.org/projects/markdown-mode/
@@ -1412,7 +1386,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (add-hook 'markdown-mode-hook 'turn-on-orgtbl)
 
 ;; ------------------------------------------------------------------------
-;; @ objc-mode
+;; @objc-mode
 
 ;; objc-mode
 (add-to-list 'magic-mode-alist '("\\(.\\|\n\\)*\n@implementation" . objc-mode))
@@ -1462,7 +1436,7 @@ Use CREATE-TEMP-F for creating temp copy."
             ))
 
 ;; ------------------------------------------------------------------------
-;; @ Objective-C
+;; @Objective-C
 
 ;; http://sakito.jp/emacs/emacsobjectivec.html
 
@@ -1561,7 +1535,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;;             ))
 
 ;; ------------------------------------------------------------------------
-;; @ org-mode
+;; @org-mode
 
 (require 'org-install)
 
@@ -1612,7 +1586,7 @@ Use CREATE-TEMP-F for creating temp copy."
              (local-set-key (kbd "C-m") 'org-return-indent)))
 
 ;; ------------------------------------------------------------------------
-;; @ perl
+;; @perl
 
 ;; perl-mode を cperl-mode のエイリアスにする
 (defalias 'perl-mode 'cperl-mode)
@@ -1790,7 +1764,7 @@ Use CREATE-TEMP-F for creating temp copy."
       )))
 
 ;; ------------------------------------------------------------------------
-;; @ php-mode
+;; @php-mode
 
 ;; php-mode の設定
 (when (require 'php-mode nil t)
@@ -1875,7 +1849,7 @@ Use CREATE-TEMP-F for creating temp copy."
   (add-hook 'php-mode-hook 'ac-cake-hook))
 
 ;; ------------------------------------------------------------------------
-;; @ python-mode
+;; @python-mode
 
 ;; M-x package-install RET python-mode RET
 
@@ -1883,7 +1857,7 @@ Use CREATE-TEMP-F for creating temp copy."
 ;; (require 'ipython)
 
 ;; ------------------------------------------------------------------------
-;; @ ruby-mode
+;; @ruby-mode
 
 ;; ruby-mode のインデント設定
 (setq ;; ruby-indent-level 3      ; インデント幅を 3 に. 初期値は 2
@@ -1918,7 +1892,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (add-hook 'ruby-mode-hook 'ruby-mode-hooks)
 
 ;; ------------------------------------------------------------------------
-;; @ text-mode
+;; @text-mode
 
 (add-hook 'text-mode-hook
           '(lambda ()
@@ -1926,7 +1900,7 @@ Use CREATE-TEMP-F for creating temp copy."
              (setq c-basic-offset 4)))
 
 ;; ------------------------------------------------------------------------
-;; @ yaml
+;; @yaml
 
 (when (require 'yaml-mode nil t)
   (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -1937,7 +1911,7 @@ Use CREATE-TEMP-F for creating temp copy."
                (setq ac-sources '(ac-source-words-in-buffer)))))
 
 ;; ------------------------------------------------------------------------
-;; @ auto-highlight-symbol
+;; @auto-highlight-symbol
 
 ;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol.el")
 ;; (auto-install-from-url "https://raw.github.com/mitsuo-saito/auto-highlight-symbol-mode/master/auto-highlight-symbol-config.el")
@@ -1951,7 +1925,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (global-auto-highlight-symbol-mode t))
 
 ;; ------------------------------------------------------------------------
-;; @ fill-column-indicator
+;; @fill-column-indicator
 
 ;; http://www.emacswiki.org/FillColumnIndicator
 ;; Usage: M-x fci-mode
@@ -1962,7 +1936,23 @@ Use CREATE-TEMP-F for creating temp copy."
 (setq-default fci-rule-column 80))
 
 ;; ------------------------------------------------------------------------
-;; @ Auto Indentation
+;; @foreign-regexp
+
+;; https://github.com/k-talo/foreign-regexp.el
+;; http://shibayu36.hatenablog.com/entry/2013/01/15/201827
+;; http://fukuyama.co/foreign-regexp
+;; http://emacswiki.org/emacs/RegularExpression
+
+;; (install-elisp https://raw.github.com/k-talo/foreign-regexp.el/master/foreign-regexp.el)
+
+(require 'foreign-regexp)
+
+(custom-set-variables
+ '(foreign-regexp/regexp-type 'perl) ;; Choose by your preference.
+ '(reb-re-syntax 'foreign-regexp))   ;; Tell re-builder to use foreign regexp.
+
+;; ------------------------------------------------------------------------
+;; @Auto Indentation
 
 ;; http://emacswiki.org/emacs/AutoIndentation
 
@@ -1972,8 +1962,17 @@ Use CREATE-TEMP-F for creating temp copy."
 (add-hook 'lisp-mode-hook 'set-newline-and-indent)
 (add-hook 'yaml-mode-hook 'set-newline-and-indent)
 (add-hook 'js2-mode-hook 'set-newline-and-indent)
-(add-hook 'cperl-mode-hook 'set-newline-and-indent)
 (add-hook 'python-mode-hook 'set-newline-and-indent)
 (add-hook 'ruby-mode-hook 'set-newline-and-indent)
 (add-hook 'php-mode-hook 'set-newline-and-indent)
 (add-hook 'nxml-mode-hook 'set-newline-and-indent)
+
+;; ------------------------------------------------------------------------
+;; @Auto Revert
+
+;; http://yoshiori.github.com/blog/2013/01/31/file-update-emacs/
+;; http://d.hatena.ne.jp/syohex/20130206/1360157000
+;; http://d.hatena.ne.jp/tomoya/20100826/1282823932
+
+;; 変更のあったファイルの自動再読み込み
+(global-auto-revert-mode 1)
