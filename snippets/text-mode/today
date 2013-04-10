@@ -2,5 +2,5 @@
 # name: today
 # key: today
 # --
-`(insert-current-date)`
-==============================
+=== `(insert-current-date)` ===
+

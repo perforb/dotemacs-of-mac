@@ -1945,6 +1945,7 @@ Use CREATE-TEMP-F for creating temp copy."
 
 ;; (install-elisp https://raw.github.com/k-talo/foreign-regexp.el/master/foreign-regexp.el)
 
+(setq migemo-isearch-enable-p nil)
 (require 'foreign-regexp)
 
 (custom-set-variables
@@ -1962,6 +1963,7 @@ Use CREATE-TEMP-F for creating temp copy."
 (add-hook 'lisp-mode-hook 'set-newline-and-indent)
 (add-hook 'yaml-mode-hook 'set-newline-and-indent)
 (add-hook 'js2-mode-hook 'set-newline-and-indent)
+(add-hook 'cperl-mode-hook 'set-newline-and-indent)
 (add-hook 'python-mode-hook 'set-newline-and-indent)
 (add-hook 'ruby-mode-hook 'set-newline-and-indent)
 (add-hook 'php-mode-hook 'set-newline-and-indent)
